@@ -1,0 +1,52 @@
+<!doctype html><html>
+<head>
+	<title>Todo List Demo</title>
+	<style>
+		body 			{ font-family: monospace; }
+		li:first-child 	{ display: none; }
+		li input 		{ height: 2em; width: 2em; transition: 400ms 150ms background-color; background:transparent; }
+		li button 		{ position: absolute; left: 4em; opacity: 0; transition: 400ms 150ms opacity; }
+		li:hover 		{ background: #eee; }
+		ul, li			{ margin:0.2em 0; padding:0; list-style: none; }
+		li  			{ display: block; font-size: 150%; }
+		input[id]:focus 	{ background: #ffc; }
+		#task, #task+input	{ font-size: 125%; padding: 0.2em; }
+		body input:invalid	{ background-color: #ddd; box-shadow: none;}
+		:focus::-webkit-input-placeholder	{ color: transparent;}
+		:focus::-moz-placeholder    		{ color: transparent; }
+		[contenteditable]{ display: inline-block; margin: 0 2em; padding: 4px; vertical-align:top;outline:0; }
+		li input:focus + button, button:focus, li:hover button	{ opacity: 1; }  
+	</style>
+</head>
+<body onload='tmp=list.innerHTML; list.innerHTML=localStorage.toDos || tmp' 
+	onunload='localStorage.toDos=list.innerHTML' >
+	
+	<h1>Todos</h1>	
+	
+	<form onsubmit="list.innerHTML+=tmp.split('{VAL}').join(task.value); reset(); return false">
+		<input tabindex=1 id=task autofocus required pattern='.*\S+.*' placeholder=" What needs doing ?"  title='non-empty' /> 
+		<input type=submit value=Save />
+	</form>	
+	
+	<ul id=list>
+		<li> 
+			<input type=checkbox onchange="setAttribute('checked',checked)" > 
+			<button onclick=list.removeChild(parentNode) title='Delete this todo item' >X</button>		
+			<span contenteditable > {VAL} </span>
+		</li>
+	</ul>		 
+<!-- The todo HTML5 platform demo uses the Following Web Platform Features:
+	-enter key handling via form
+	-autofocus to make entry gathering quicker
+	-form validation attribs prevent empty items
+	-implicit with(this) effect on event attribs
+	-IDs as global objects for clean binding
+	-localStorage for persistence
+	-wysiwyg task editing via contenteditable
+	-onunload as a catch-all event
+	-CSS animations for accessibility and avoiding flashiness
+
+ Tested in FireFox, Chrome, and IE10 
+-->
+</body>
+</html>

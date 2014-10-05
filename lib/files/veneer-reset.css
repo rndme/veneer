@@ -1,0 +1,43 @@
+/**  veneer.js CSS RESET 
+ {
+	version: '1.0.0',
+	purpose: 'reset CSS on custom elements using a namespaced [lang='shadow] reset css sheet'	
+ }
+**/
+
+veneer.css("\
+[lang='shadow'] div,[lang='shadow'] dl,[lang='shadow'] dt,[lang='shadow'] dd,[lang='shadow'] ul,[lang='shadow'] ol,[lang='shadow'] li,[lang='shadow'] h1,[lang='shadow'] h2,[lang='shadow'] h3,[lang='shadow'] h4,[lang='shadow'] h5,[lang='shadow'] h6,[lang='shadow'] pre,[lang='shadow'] code,[lang='shadow'] form,[lang='shadow'] fieldset,[lang='shadow'] legend,[lang='shadow'] input,[lang='shadow'] textarea,[lang='shadow'] p,[lang='shadow'] blockquote,[lang='shadow'] th,[lang='shadow'] td	{margin:0;padding:0;}\
+[lang='shadow'] table	{border-collapse:collapse;border-spacing:0;}\
+[lang='shadow'] fieldset,[lang='shadow'] img	{border:0;}\
+[lang='shadow'] address,[lang='shadow'] caption,[lang='shadow'] cite,[lang='shadow'] code,[lang='shadow'] dfn,[lang='shadow'] em,[lang='shadow'] strong,[lang='shadow'] th,[lang='shadow'] var	{font-style:normal;font-weight:normal;}\
+[lang='shadow'] ol,[lang='shadow'] ul	{list-style:none;}\
+[lang='shadow'] caption,[lang='shadow'] th	{text-align:left;}\
+[lang='shadow'] h1,[lang='shadow'] h2,[lang='shadow'] h3,[lang='shadow'] h4,[lang='shadow'] h5,[lang='shadow'] h6	{font-size:100%;font-weight:normal;}\
+[lang='shadow'] q:before,[lang='shadow'] q:after	{content:'';}\
+[lang='shadow'] abbr,[lang='shadow'] acronym	{border:0;font-variant:normal;}\
+[lang='shadow'] sup	{vertical-align:text-top;}\
+[lang='shadow'] sub	{vertical-align:text-bottom;}\
+[lang='shadow'] input,[lang='shadow'] textarea,[lang='shadow'] select	{font-family:inherit;font-size:inherit;font-weight:inherit;}\
+[lang='shadow'] input,[lang='shadow'] textarea,[lang='shadow'] select	{*font-size:100%;}\
+[lang='shadow'] legend	{color:#000;}\
+[lang='shadow'] body	{font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}\
+[lang='shadow'] select,[lang='shadow'] input,[lang='shadow'] button,[lang='shadow'] textarea	{font:99% arial,helvetica,clean,sans-serif;}\
+[lang='shadow'] table	{font-size:inherit;font:100%;}\
+[lang='shadow'] pre,[lang='shadow'] code,[lang='shadow'] kbd,[lang='shadow'] samp,[lang='shadow'] tt	{font-family:monospace;*font-size:108%;line-height:100%;}\
+[lang='shadow'] h1	{font-size:138.5%;}\
+[lang='shadow'] h2	{font-size:123.1%;}\
+[lang='shadow'] h3	{font-size:108%;}\
+[lang='shadow'] h1,[lang='shadow'] h2,[lang='shadow'] h3	{margin:1em 0;}\
+[lang='shadow'] h1,[lang='shadow'] h2,[lang='shadow'] h3,[lang='shadow'] h4,[lang='shadow'] h5,[lang='shadow'] h6,[lang='shadow'] strong	{font-weight:bold;}\
+[lang='shadow'] abbr,[lang='shadow'] acronym	{border-bottom:1px dotted #000;cursor:help;}\
+[lang='shadow'] em	{font-style:italic;}\
+[lang='shadow'] blockquote,[lang='shadow'] ul,[lang='shadow'] ol,[lang='shadow'] dl	{margin:1em;}\
+[lang='shadow'] ol,[lang='shadow'] ul,[lang='shadow'] dl	{margin-left:2em;}\
+[lang='shadow'] ol	{list-style:decimal outside;}\
+[lang='shadow'] ul	{list-style:disc outside;}\
+[lang='shadow'] dl dd	{margin-left:1em;}\
+[lang='shadow'] th,[lang='shadow'] td	{border:1px solid #000;padding:.5em;}\
+[lang='shadow'] th	{font-weight:bold;text-align:center;}\
+[lang='shadow'] caption	{margin-bottom:.5em;text-align:center;}\
+[lang='shadow'] p,[lang='shadow'] fieldset,[lang='shadow'] table,[lang='shadow'] pre	{margin-bottom:1em;}\
+[lang='shadow'] input[type=text],[lang='shadow'] input[type=password],[lang='shadow'] textarea	{width:12.25em;*width:11.9em;}", true);

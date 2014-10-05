@@ -1,0 +1,63 @@
+<!doctype html><html><head>		<title>Veneer MP3 Player</title>
+<style>	
+	body veneer-file div { display: none; }
+	html.veneer main { visibility: visible;}
+	main { visibility: hidden;}
+	#hist, veneer-file .btn { width: 42em; margin-left: -0.6em;}
+	select { width: 42em; border:0; overflow: hidden;outline:none;}
+	button { vertical-align: top !important; width: 10em; }
+	.btn {height: 2.2em;}
+	 #list,li { list-style:none; display:block; max-height: 10em; overflow: auto;margin:0; padding:0 0.3em; }
+</style>
+</head>
+<body class=container>  	
+<main class=col-md-10 >		<h1>Veneer MP3 Player</h1>	 
+
+	<veneer-bootstrap></veneer-bootstrap>		
+		
+	<veneer-file multiple value="Add Tracks..." onchange="pbox.render(this)" accept="audio/mpeg"></veneer-file>
+	
+	<veneer-mustache id=pbox >
+		<template>		
+			<veneer-playlist auto size=10>		
+				<audio  controls onloadedmetadata=log.append(this)>
+					{{#files}}<source src='{{url}}' type='audio/mpeg' title="{{name}}" />{{/files}}
+				</audio>				
+				<button class=btn onclick=parentNode.next(-1) >Previous</button>
+			</veneer-playlist>			
+		</template>
+	</veneer-mustache>
+			
+	<veneer-persist id=hist >
+
+		<h3 class="col-md-4"> Play Log  <input type=button class=btn value='Clear' onclick="hist.clear()" />	</h3>
+	
+		<div class="col-md-6 col-md-offset-2"> <br /> 
+			<label class="pull-right"> &nbsp; &nbsp; <small> Filter  </small>
+				<veneer-input>
+					<veneer-filter target=#list></veneer-filter>
+				</veneer-input>
+			</label>
+		</div>
+		
+		<br clear=both>
+		
+		<ul id=list ></ul>
+			
+	</veneer-persist>
+	
+	<veneer-mustache id=log target=#list >
+		<template>		
+			<li> 
+				<veneer-dateformat time="{{|Date}}" format="dddd, mmmm dS @ h:MM:ss TT" ></veneer-dateformat>
+				<p> {{duration |veneer.hms}}s :: {{parentNode.title}} </p>
+			</li>
+		</template>
+	</veneer-mustache>
+	
+</main>
+
+<script src="http://danml.com/veneer/lib/veneer.full.src.js"></script>
+
+</body>
+</html>

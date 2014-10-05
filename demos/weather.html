@@ -1,0 +1,39 @@
+<html><head><title>Weather Demo</title>
+<script src="http://danml.com/veneer/lib/veneer.full.src.js"></script>
+</head><body>
+ 
+ <veneer-bootstrap ></veneer-bootstrap>	
+ 
+ <main class=container>
+ 
+ <style>
+ veneer-datediff span { display: none; }
+ veneer-datediff span.dt_mins { display: inline-block; }
+ </style>
+	<div class=col-md-10>	 
+	 
+<veneer-mustache 
+ id=viewer
+ url="http://forecast.weather.gov/MapClick.php?lat=40.10000&lon=-88.21&unit=0&lg=english&FcstType=json&callback=viewer.render">
+	 
+	 <h2> <progress inderterminate ></progress> Loading Weather </h2>
+	 <template>
+	{{#currentobservation}}
+		<h1> {{Weather}} at {{name}} <br /><small><veneer-datediff time="{{creationDate}}"></veneer-datediff> ago</small></h1>
+		<h2> {{Temp}}F, {{Relh}}% humidity, winds at {{Winds}}mph </h2>
+		<p> {{data.text.0}} </p>
+		
+		<img src="{{data.iconLink.0}}" height=100 width=100/>
+		
+		<veneer-map width=150 height=150 lat={{location.latitude}} lon={{location.longitude}} zoom=10 ></veneer-map>
+		
+	{{/currentobservation}}
+	
+	</template>
+	 </veneer-mustache>
+		
+	</div>
+
+</main>
+</body>
+</html>

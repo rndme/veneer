@@ -1,0 +1,75 @@
+<!-- veneer element definition --> 
+ <veneer-element name="bs-accord" >
+ 
+	<template>
+		
+		<div class="panel-group" id="{{id}}">
+			{{content}}			
+		</div>
+		
+		
+		
+		<veneer-loader>
+			http://getbootstrap.com/dist/css/bootstrap.min.css
+			https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
+			http://getbootstrap.com/dist/js/bootstrap.min.js
+		</veneer-loader>
+	</template>
+
+
+	<style>
+	
+		
+	</style>
+			
+	<script type=shadow>
+	
+				
+				
+		var elm=e.target;
+
+		
+		
+		if(!elm._html) return;
+		//boot up a clone of old contents to rake into new contents
+		var clone=veneer.elm("div");
+		clone.innerHTML=elm._html;
+
+		var kids=veneer._(clone.children);
+		kids.map(function(item, index){ //translate direct child elms with titles to full on panels with divitus:
+			
+  				var div=veneer.elm("div", {"class":"panel panel-default"}),
+				hd=div.appendChild(veneer.elm("div", {"class":"panel-heading"})),
+				h4=hd.appendChild(veneer.elm("h4", {"class":"panel-title"})),
+				myId="collapse"+index,
+				a=h4.appendChild(veneer.elm("a", {
+						"data-toggle":"collapse",
+						"data-parent":"#"+elm.id,
+						"href":	"#"+myId
+				}, item.title ));
+				
+				item.title="";				
+				var box=div.appendChild(veneer.elm("div", {id: myId, "class":"panel-collapse"})),
+				cont=box.appendChild(veneer.elm("div", {"class":"panel-body"}, item.outerHTML ));
+				
+				if(index==0){ 
+					box.className+=" collapse in"; 
+				}else{
+				  box.className+=" collapse";				 
+				}
+	
+				
+				item.parentNode.insertBefore(div, item);				
+				item.remove();
+		});
+		
+		elm.innerHTML=veneer.template({
+			id: 	elm.id,
+			content: clone.innerHTML
+		} , elm.innerHTML );
+		
+		elm.removeAttribute("id"); 
+	</script>
+
+ </veneer-element>
+ 

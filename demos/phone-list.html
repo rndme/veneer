@@ -1,0 +1,44 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <!--Sidebar content-->
+
+        Search: <veneer-filter target='#phones'></veneer-filter>
+
+		Sort By: <veneer-sort target=#phones>
+		<select>
+          <option value="@data-name">Alphabetical</option>
+          <option value="@data-age">Newest</option>
+        </select>
+		</veneer-sort>
+	
+		
+      </div>
+      <div class="col-md-10">
+        <!--Body content-->
+
+    
+	<veneer-mustache src=phones.js onchange="myData=this._data" >
+		
+	    <ul id="phones" class=phones>
+			{{#phones}} 
+			<li data-name={{name}} data-age={{age}} class="thumbnail">
+			
+				<span data-toggle="modal" data-target="#details" >
+					<a href="#/phones/{{id}}" class="thumb" >
+						<img @src="http://angular.github.io/angular-phonecat/step-6/app/{{imageUrl}}"/>
+					</a>
+				</span>
+				
+				<a href="#/phones/{{id}}" >
+					<span data-toggle="modal" data-target="#details" >{{name}}</span></a>
+				<p>{{snippet}}</p>
+			</li>
+			{{/phones}}
+		</ul>		
+		
+	</veneer-mustache>
+		
+      </div>
+    </div>
+  </div>  

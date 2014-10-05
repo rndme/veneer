@@ -1,0 +1,131 @@
+<!-- veneer element definition --> 
+ <veneer-element name="bs-tabs" >
+ 
+	<template>
+		
+		
+			{{content}}			
+		
+		
+		<veneer-loader>
+			http://getbootstrap.com/dist/css/bootstrap.min.css
+			https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
+			http://getbootstrap.com/dist/js/bootstrap.min.js
+		</veneer-loader>
+	</template>
+
+
+	<style>
+	
+		.tabs { position: relative; opacity: 0.7; }
+		
+	</style>
+			
+	<script type=shadow>
+	
+				
+				
+		var elm=e.target;
+		var isFade=elm.hasAttribute("fade");
+		
+		
+		if(!elm._html) return;
+		//boot up a clone of old contents to rake into new contents
+		var clone=veneer.elm("div");
+		clone.innerHTML=elm._html;
+
+		var kids=veneer._(clone.children),
+		items= kids.map(function(item, index){ //translate direct child elms with titles to full on panels with divitus:
+			var title=item.title;
+			item.title="";
+			
+			return {name:  title, content: item.outerHTML }
+		});	
+
+		clone.innerHTML="";
+		var hd=veneer.elm("ul", {"class":"nav nav-tabs", role: "tablist" });
+		var bd=veneer.elm("div", {"class":"tab-content"});
+		
+		
+		clone.appendChild(hd);
+		clone.appendChild(bd);
+		
+		
+		
+		items.map(function(item, index){
+			var safeName=String(item.name).replace(/\W/g,"")+"_"+Math.random().toString(36).slice(-5);
+			var li=hd.appendChild(veneer.elm("li", {
+				"class": index ? "" : "active",
+			}));
+			li.appendChild(veneer.elm("a", {
+				href: "#"+safeName,
+				role: "tab",
+				"data-toggle": "tab"
+			}, item.name));
+		
+			var dv=bd.appendChild(veneer.elm("div", {
+				"class": index ? "tab-pane" : " tab-pane active",
+				id: safeName				
+			}, item.content ));
+			
+			if(isFade){
+				dv.className+=" fade";
+				if(!index){dv.className+=" in";}
+			}
+			
+		
+		
+		
+		});
+		
+		/*
+		
+		
+		
+			
+			<!-- Tab panes -->
+		<div class="tab-content">
+			<div class="tab-pane active" id="home">...</div>
+			<div class="tab-pane" id="profile">...</div>
+			<div class="tab-pane" id="messages">...</div>
+			<div class="tab-pane" id="settings">...</div>
+		</div>
+			
+		kids.map(function(item, index){ //translate direct child elms with titles to full on panels with divitus:
+  				var div=veneer.elm("div", {"class":"panel panel-default"}),
+				hd=div.appendChild(veneer.elm("div", {"class":"panel-heading"})),
+				h4=hd.appendChild(veneer.elm("h4", {"class":"panel-title"})),
+				myId="collapse"+index,
+				a=h4.appendChild(veneer.elm("a", {
+						"data-toggle":"collapse",
+						"data-parent":"#"+elm.id,
+						"href":	"#"+myId
+				}, item.title )),
+				box=div.appendChild(veneer.elm("div", {id: myId, "class":"panel-collapse"})),
+				cont=box.appendChild(veneer.elm("div", {"class":"panel-body"}, item.outerHTML ));
+				
+				if(index==0){ 
+					box.className+=" collapse in"; 
+				}else{
+				  box.className+=" collapse";				 
+				}
+	
+	 			item.title="";				
+				item.parentNode.insertBefore(div, item);				
+				item.remove();
+		});
+		
+		*/
+		
+		
+		
+		elm.innerHTML=veneer.template({
+			id: 	elm.id,
+			content: clone.innerHTML
+		} , elm.innerHTML );
+		
+		elm.removeAttribute("id"); 
+	</script>
+
+ </veneer-element>
+ 

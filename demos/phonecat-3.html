@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<!-- compares to http://angular.github.io/angular-phonecat/step-3/app/ -->
+
+	<title>Phone Cat Demo</title>
+	<veneer-bootstrap></veneer-bootstrap>
+</head>
+<body>
+	
+ <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <!--Sidebar content-->
+
+        <veneer-filter target='#phones'></veneer-filter>
+
+      </div>
+      <div class="col-md-10">
+        <!--Body content-->
+
+    
+	<veneer-mustache object=model >
+		
+	    <ul id="phones">
+			{{#phones}}
+				<li> {{name}}
+					<p>{{snippet}}</p>
+				</li>
+			{{/phones}}
+		</ul>		
+		
+	</veneer-mustache>
+		
+      </div>
+    </div>
+  </div>  
+
+	<script>
+	model = {
+	 phones:[
+		{'name': 'Nexus S',
+		 'snippet': 'Fast just got faster with Nexus S.'},
+		{'name': 'Motorola XOOM™ with Wi-Fi',
+		 'snippet': 'The Next, Next Generation tablet.'},
+		{'name': 'MOTOROLA XOOM™',
+		 'snippet': 'The Next, Next Generation tablet.'}
+	  ]
+	};
+	
+  </script>
+  
+  	<script src="http://danml.com/veneer/lib/veneer.auto.min.js"></script>
+</body>
+</html>

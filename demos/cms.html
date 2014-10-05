@@ -1,0 +1,236 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Veneer CMS Demo</title>
+
+	<link rel="shortcut icon" type="image/png" href="veneericon2.png?3345" />
+	<link rel="icon" type="image/png" href="veneericon2.png?4334" />
+
+	
+<style> /* just for this demo really */
+	body { font-family: sans-serif;  }
+	:invalid{ background:red;}
+	
+	#editor textarea { width: 100%; min-height: 8em; }
+	#editor label { display: block; margin-top: 1em; }
+	#editor label b { display: block;}
+	#editor label[title]:after { 
+		content:attr(title); 
+		opacity: 0;
+		transition: 550ms 333ms opacity;
+	}
+	#editor label[title]:hover:after{
+		opacity: 1;
+	}
+	
+</style>
+</head>
+<body>
+
+
+<div>
+
+<veneer-bootstrap icons js></veneer-bootstrap>
+
+<nav class="col-md-3">
+
+<veneer-mustache  id=viewer object="x" >
+	 
+	 <h2> Edit A Slide </h2>
+	 <select onchange=editSlide(this.value)>
+	{{#slideArray}}
+	    <option value={{i}}>{{name}}</option>	
+	{{/slideArray}}
+	
+	</select>
+</veneer-mustache>
+		
+
+<veneer-mustache  id=viewer object="defaults" >
+	 
+	 <h2> Create a New Slide </h2>
+	 <select onchange=renderEditor(this.value)>
+	{{#pageList}}
+	    <option>{{.}}</option>	
+	{{/pageList}}
+	
+	</select>
+</veneer-mustache>
+		
+
+</nav>
+
+
+</div>
+
+<veneer-item id=editor class="col-md-4"></veneer-item>
+
+<template class='item header'>
+  <h1>{{title}}</h1>
+</template>
+
+
+
+<script>
+
+defaults={
+ pageTypes:{
+ 
+	"titleSlide": [
+		"titleText",
+		"subtitleText",
+		"imageUrl",
+		"imageAlt"
+	],
+	"textOnly": [
+		"text",
+		"audioURL",
+		"transcript"
+	],
+	"2textImage": [
+		"image1Url",
+		"image1Alt",
+		"image1Text",
+		"image2Url",
+		"image2Alt",
+		"image2Text",
+		"audioURL",
+		"transcript"
+	],
+	"imagesOnly": [
+		"images",
+		"audioURL",
+		"transcript"
+	],
+	"textImage": [
+		"imageUrl",
+		"imageAlt",
+		"text",
+		"audioURL",
+		"transcript"
+	],
+	"textImageStack": [
+		"imageUrl",
+		"imageAlt",
+		"text",
+		"audioURL",
+		"transcript"
+	],
+	"muchText": [
+		"text"
+	]
+},
+
+
+ fieldTypes:{
+	"titleText": {
+		"maxlength": 45,
+		"type": "text"
+	},
+	"subtitleText": {
+		"type": "textarea"
+	},
+	"imageUrl": {
+		"type": "url"
+	},
+	"imageAlt": {
+		"title": "describe the image to someone who cannot see",
+		"type": "textarea"
+	},
+	"text": {
+		"title": "Enter the main text content for the slide. Use HTML if needed",
+		"type": "textarea"
+	},
+	"audioURL": {
+		"type": "url"
+	},
+	"transcript": {
+		"type": "textarea"
+	},
+	"image1Url": {
+		"type": "url"
+	},
+	"image1Alt": {
+		"title": "describe the image to someone who cannot see",
+		"type": "textarea"
+	},
+	"image1Text": {
+		"maxlength": 145,
+		"title": "provide a caption to give more context to the image",
+		"type": "text"
+	},
+	"image2Url": {
+		"type": "url"
+	},
+	"image2Alt": {
+		"title": "describe the image to someone who cannot see",
+		"type": "textarea"
+	},
+	"image2Text": {
+		"maxlength": 145,
+		"title": "provide a caption to give more context to the image",
+		"type": "text"
+	},
+	"images": {
+		"type": "image"
+	}
+}
+
+}//end defaults;
+
+
+defaults.pageList=Object.keys(defaults.pageTypes);
+
+function fieldEditor(type, key){
+  var inp= veneer.elm( type.type=="textarea"?"textarea":"input",  {type: type.type, name: key});
+  if(type.maxlength)inp.maxlength=type.maxlength;
+  var lab=veneer.elm("label", {title: type.title||''}, key.bold() );
+  lab.appendChild(inp);
+  return lab;
+}
+
+function renderEditor(type){
+	editor.innerHTML= "";
+	defaults.pageTypes[type].map(function(a){
+		return fieldEditor( this[a], a );
+	}, defaults.fieldTypes).map(editor.appendChild.bind(editor));
+}
+
+
+function editSlide(slideName){
+
+console.log(slideName);
+
+var slide=x.slides[slideName];
+	renderEditor(slide.slideType);
+	editor.value=slide.content;
+}
+
+
+
+function obVals(a){var c=[],b,e=eval.call.bind(hasOwnProperty,a);for(b in a)e(b)&&(c[c.length]=a[b]);return c}
+
+eval(function(s,r){var a,x,i=0,m=r.length,q=/([.*+?^${}()|[\]\/\\])/g;for(;i<m;i++){a=r[i]||"";x=RegExp(a.slice(0,1).replace(q,"\\$1"),"g");s=s.replace(x,a.slice(1))}return s}("x={name*DemNstratiN LessNGid*demoGs;des:{0:{name*T^l%S;deGs;deType*t^leS;deG+:{t^leText*T^l%S;deGsubt^leText*A simpl%templat%for s;d%t^l%pagesGYJET.X~An |-QA Blackbird K f;ghVover Ca;forniaGaudioURL*+s/ACES179_Lecture1_S;de2.mp3GtrZscript*ThiFlessN focuseFN agricultur%Zd ecNomic growth. IVactually begKFear;er thZ that$w%will talk abouVa rebel;N thaVoccurred K #1670s. IVdoeFKcorporat%material from chapter 3 K DZbom. In termF@#key topics$w%addresF#goalF@farmerFZd #wayFthos%goalFaffecV#strategieFfarmerFadopVto try to mak%chZg%happen$farmers' Kfluenc%N po;tics$Zd then look aVlZd po;cy aFiVdevelopFZd helpFpopulat%#Eastern half @#Un^ed States$makKg iVa natiN @farmers. We'll look also$over #firsVhalf @#19th century$aV#wayFagricultur%cNtributed to #ecNomic growth @#new Repub;c.\"}},1:{name*TexVOnly S;deGs;deType*textOnlyG+:{text*<ul><;>Som%s;deFhav%Nly a few bulleVpoKtsHThaVtyp%@+ goeFNto a pag%;k%this.</;></ul>\"}},2:{name*TexVw^h Imag%S;deGs;deType*textImageG+:{YJET.X~An |-QA recNnaissZc%jeVK f;ghVover Ca;forniaGtext*<ol><;>SometimeF^'FbesVto hav%Z ?%illustratKg #poKtsH!</;></ul>\"}},3:{name*Annotated ImageGs;deType*ZnotImgG+:{YJET.X~An |-QA recNnaissZc%jeVK f;ghVover Ca;forniaGdefaultText*Other times$you'll wZV#?%to b%#star @#show$such aFw^h thiFKteractiv%?%@Z |-Q recNnaissZc%plZe.Gs;deData:[{t^le*Cockp^Gcoord*320 $358 $365 $403GareaAlt*GYKstruments_srQ.X~#cockpiV@#|-Q waFpacked w^h KstrumentatiNGtext*Th%|-Q carried a f;ght-crew @two$w^h #piloVK #frNVseaVmZagKg #cNtrolFdepicted her%Zd a recNnaissZc%systemFofficer K #rear seaVmN^orKg surveil;Zc%systems\"},{t^le*EngKeGcoord*520 $170 $565 $215GareaAlt*larg%engKeFKstalled N each wKgGYengKe_srQ.X~a schematic @#|-Q engK%under differenVair-flow cNfiguratiNFto achiev%variouFtop speedsGtext*Th%|-Q waFpowered by two PratV& Wh^ney J58-P4 engKes$Z Knovativ%engK%thaVachieved peak efficiency aV#|-Q'FcruisKg speed @Mach 3.2\"},{t^le*ChKesGcoord*410 $458 $455 $503GareaAlt*#fuselag%flattenFouVto a sharp edgeGYedgeN_srQ.X~frNt-N view @a parked |-Q$showKg #sharp edgeFsmoothly trZs^iNKg to #round fuselageGtext*Th%blade-;k%edgeFalNg #sideF@#fuselag%Zd nos%wer%origKally proposed to reduc%#vehicle'Fradar signature$buValso improved aerodynamic performZce\"},{t^le*Air InletGcoord*51 $243 $96 $288GareaAlt*air-KleVaV#frNV@#engKeGYKtake_srQ.X~Th%air Ktak%@Z |-Q$characterized by ^'Fsharply cNical shapeGtext:'Th%|-Q featured a computer cNtrolled \"spike\" K frNV@#air Klet$cNtrol;ng #amounV@air #engK%needFaVvariouFspeeds'},{t^le*Midair Refue;ngGcoord*310 $260 $355 $305GareaAlt*In-f;ghVfuel porVN ro@@plZeGYrefuel_srQ.X~A sid%view @Z |-Q refue;ng K midf;ghVfrom a tZker plZe'Ftrai;ng boomGtext*Th%|-Q generally expended ^Ffuel supply K 90 mKuteF@f;ghVtime$necess^atKg frequenVmid-air fuel stops\"}]}},4:{name*Time;neGs;deType*time;neG+:{Y;ne.X~time;n%@a JET productiN ;neGdefaultText*An Kteractiv%time;n%iFZother useful way to presenVKstructiNal +.Gs;deData:[]}},5:{name*ImageFOnlyGs;deType*?esOnlyG+:{?es:{1:{Yrefuel_srQ.X~Mid air refue;ng @#|QG?eCaptiN*Mid air refue;ng @#|Q\"},2:{YKtake_srQ.X~Intak%@#|-QG?eCaptiN*IntakeFN #|-Q\"},3:{YedgeN_srQ.X~Edg%@#|-QG?eCaptiN*Edg%@#|-Q\"},4:{YengKe_srQ.X~EngK%@#|-QG?eCaptiN*EngK%@#|-Q\"},5:{YKstruments_srQ.X~InstrumentF@#|QG?eCaptiN*InstrumentF@#|Q\"}}}},6:{name*TexVw^h Imag%S;d%2 (stacked)Gs;deType*textImageStackG+:{YJET.X~An |-QA recNnaissZc%jeVK f;ghVover Ca;forniaGtext*<ol><;>SometimeF^'FbesVto hav%Z ?%illustratKg #poKtsH!H!H!H!H!H!H!H!H!H!</;></ul>\"}}}}","^it`~?^*`|SR`^eAlt`Zan`Vt `Y?V*+s/`XjpgG`VeUrl`Q71`Non`Kin`H</;><;>`G\",`Fs `@of `?imag`;li`+content`*:\"`%e `$, `#the `!Made in the bullet points".split('`')));
+
+x.slideArray=obVals(x.slides);
+x.slideArray.forEach(function(a,b){
+ a.i=b;
+});
+
+</script>
+
+<!-- enable all known custom html tags: -->
+<script src=http://danml.com/veneer/lib/veneer.full.src.js></script>
+<script>
+	//async dispatch non-core tags :
+	veneer.requires(
+		["markdown", "mustache"], 
+		"http://danml.com/veneer/lib/files/"
+	);
+</script>
+
+
+</body>
+</html>

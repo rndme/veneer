@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Veener Bootstrap Widgets</title>
+	<style>img {width: 100%; } body h3 {margin-top: 2.5em; } .panel-title>a {display: block;}</style> 
+  <!-- pre-loading removes FOUC, but is not needed per-se:
+   <link rel=stylesheet href="http://getbootstrap.com/dist/css/bootstrap.min.css"> -->
+</head>
+<body>
+<main class=container>
+ 
+	<h1>Veneer Bootstrap Widgets</h1>
+ 
+	<veneer-bootstrap widgets js  ></veneer-bootstrap>
+ 
+ 	<veneer-pagenav target="h3" link></veneer-pagenav>
+ 
+ 	<section class=col-md-10>	 
+	
+		<h3>Tabs</h3>
+		<bs-tabs id='tabs' title='Tab Demo' fade >
+			<img  title="tab 1" src="1.jpg" >
+			<img  title="tab 2" src="2.jpg" >
+			<img  title="tab 3" src="3.jpg" >
+		</bs-tabs>
+	
+	
+		<h3>Accordion</h3>
+		<bs-accord id='accordion' title='Accord Demo' >
+			<img  title="panel 1" src="1.jpg" >
+			<img  title="panel 2" src="2.jpg" >
+			<img  title="panel 3" src="3.jpg" >
+		</bs-accord>
+	
+	
+		<h3>Carousel</h3>
+		<bs-carousel id='carousel-example-generic'  >
+			<img title="slide 1" src="1.jpg" >
+			<img title="slide 2" src="2.jpg" >
+			<img title="slide 3" src="3.jpg" >
+		</bs-carousel>
+		
+	
+		<h3>Modals</h3>
+		<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#demo">
+			Launch demo modal
+		</button>
+
+
+		<bs-modal id='demo' title="The Deal">
+			The Fine Print demo modal content.
+		</bs-modal> 
+		 
+
+	</section>	
+</main>
+
+<script src="http://danml.com/veneer/lib/veneer.full.min.js"></script>
+
+</body>
+</html>

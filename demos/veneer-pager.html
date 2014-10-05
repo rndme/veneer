@@ -1,0 +1,103 @@
+<html>
+ 
+ <main class=container>
+ 
+	<veneer-pager size=20>
+	<table>
+	<thead>
+		<tr>
+			<th>a</th>
+			<th>b</th>
+			<th>c</th>
+			<th>d</th>
+			<th>e</th>
+		</tr>
+	</thead>
+	<tbody>
+		<!-- simulate a large table of data from the server using JS: -->
+	
+	
+			
+				
+	<script>
+var buffer=[];
+var max=100;
+function cellData(){
+   return Math.random().toString(36).slice(-1 * (Math.floor(Math.random() * 7)+1));
+}
+	for(var i=0; i<max; i++){
+		buffer.push("<tr><td>"+cellData()+"</td><td>"+cellData()+"</td><td>"+cellData()+"</td><td>"+cellData()+"</td><td>"+cellData()+"</td></tr>");
+	
+	}
+	
+	document.write(buffer.join("\n"));
+	</script>
+	</max>
+	</table>
+	
+	</veneer-pager>
+
+	
+	
+	
+ <script src="http://danml.com/veneer/lib/veneer.full.src.js"></script>
+ <script>
+ 
+  var pager={
+	items: [],
+	cache: function(tr){this.items.push(tr.outerHTML); tr.remove(); },
+	uncache: function(dest, start, stop){
+		dest.innerHTML=this.items.slice(start, stop).join("\n");
+	},
+  }
+ 
+ 
+ 
+	 veneer("veneer-pager", {
+	
+	events: {
+		insert: function(e){ 
+			var elm=e.target;
+			var kids=veneer.$(elm.target, elm);
+			var root=kids[0].parentNode;
+			var max=kids.length;
+			elm._index=-1;
+			console.log(kids.length, " rows found")
+			kids.map(pager.cache, pager);
+			elm.start=0;
+			elm.stop=elm.size || 20;
+			elm.root=root;
+			pager.uncache(root, elm.start, elm.stop);
+			
+			//append controls:
+			var box=veneer.elm("div",{"class":"pager-controls"}, "next");
+			elm.appendChild(box);
+			
+			
+		},
+		next: function(e){
+			
+			this.start+=this.size;
+			this.stop+=this.size;
+			if(this.stop>= max){this.stop=max; this.start=max-this.size;}
+			pager.uncache(this.root, this.start, this.stop);
+		}
+	},
+	props:{
+		size: Number,
+		target: String
+	},
+	defaults:{
+		target: "tbody tr"
+	},
+	css:   "veneer-pager { background-color: red; display: inline-block;} " +
+			"veneer-pager .pager-controls{  background-color: blue; display: inline-block; width: 100%; }"
+						
+  });
+  
+ </script>
+ 
+ 
+ 
+</main>
+</html>
