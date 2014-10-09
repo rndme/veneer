@@ -28,9 +28,27 @@ veneer.template=function template(ob, str){
 veneer.include=function(u){
 	if(!u||!u.join){u=[u];}
 	return u.map(function(u,x){
-		var d=document;
-		 d=d.documentElement.children[0].appendChild(d.createElement("script")); 
-		 d.src=u; 
+		var doc=document;
+		 d=doc.createElement("script");
+		 d.addEventListener("load", function(){this.loaded=true;},true);
+		 
+		 var req=u.split(/[?#]/);
+		 d.src=req[0]; 
+		 
+		 function inject(){
+			doc.documentElement.children[0].appendChild(d);
+		 }
+		 
+		if(!req[1]){
+			inject();
+		}else{
+			//wait for depend, then inject
+			(function waiter(){
+				var need=veneer.$("script[src*='"+req[1]+"']")[0];
+				if(need && need.loaded){inject();}else{setTimeout(waiter, 37);}
+			}());
+			
+		}
 		 return d;
 	});
 };
