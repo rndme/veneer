@@ -13,6 +13,7 @@ if(!document.registerElement){
  
  /* create a style tag to hold CSS for all the custom components */
  (function(x,d){d=document, x=d.getElementsByTagName("script")[0]; if(!x){return;}
+veneer.root=x.parentNode;
 veneer.style=x.parentNode.appendChild(d.createElement("style"));}());
 
 
@@ -32,7 +33,7 @@ veneer.include=function(u){
 		 d=doc.createElement("script");
 		 d.addEventListener("load", function(){this.loaded=true;},true);
 		 
-		 var req=u.split(/[?#]/);
+		 var req=u.split(/[#]/);
 		 d.src=req[0]; 
 		 
 		 function inject(){
@@ -44,7 +45,9 @@ veneer.include=function(u){
 		}else{
 			//wait for depend, then inject
 			(function waiter(){
-				var need=veneer.$("script[src*='"+req[1]+"']")[0];
+				var need;
+				try{
+				need=veneer.$("script[src*='"+req[1]+"']")[0];}catch(y){console.log(111);need={loaded:1}} 
 				if(need && need.loaded){inject();}else{setTimeout(waiter, 37);}
 			}());
 			
@@ -459,7 +462,11 @@ function veneer(tagName, def){
 	// use registerElement() to make the new tag name recognized by the browser
 	aPrototype._spawn=document.registerElement(tagName, {
 	    prototype: aPrototype
-	});
+	});  
+	
+	setTimeout(function(){ 
+		veneer.raiseEvent("init."+tagName.split("-").pop(), window, {tag: tagName});
+	}, 33);
 	
 };//end veneer()
 
