@@ -118,7 +118,7 @@ veneer.tags={};
 veneer._=Function.call.bind([].slice);
 
 //like jQuery's selection tool:
-veneer.$=function $(css,root){ return veneer._((root||document.documentElement).querySelectorAll(css)||[]); };
+veneer.$=function $(css,root){ return veneer._((root||document).querySelectorAll(css)||[]); };
 
 //a constructor for Boolean attribute values, mapping "blank" to true and all else to false.
 veneer.bool=function bool(v){return (v===""||v==="true"||v===true);};
