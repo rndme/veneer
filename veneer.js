@@ -113,6 +113,8 @@ veneer.requires=function(arrModules, base){
 //this is where loaded tag defs go, so imports can check for depends
 veneer.tags={};
 
+//now timestamp
+veneer.now= (window.performance && performance.now.bind(performance)) || (function(){ var now=+new Date(); return function(){return new Date()-now;};}());
 
 //collection to array:
 veneer._=Function.call.bind([].slice);
