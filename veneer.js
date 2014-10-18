@@ -40,6 +40,7 @@ veneer.include=function(u){
 			doc.documentElement.children[0].appendChild(d);
 		 }
 		 
+		 console.info("req", req)
 		if(!req[1]){
 			inject();
 		}else{
@@ -227,7 +228,7 @@ veneer.parseElement=function(elm){
 		defaults: {},
 		props: {},
 		
-		css: (veneer.$('style', elm)[0]||"").innerHTML.trim()
+		css: ((veneer.$('style', elm)[0]||"").innerHTML||"").trim()
 	};
 	
 	elm._frag=temp;	
@@ -479,6 +480,8 @@ veneer("veneer-element", {
 		insert: function(){veneer.parseElement(this);}
 	}
 });
+
+veneer.$("script").map(veneer.set,["loaded", true]); 
 
 setTimeout(function(){
 	document.documentElement.className+=" veneer";
