@@ -1,47 +1,46 @@
 <!doctype html>
-<html>
-<head>
+<html><head>
+
 	<title>Todo List Demo</title>
 	
 	<style>
 		body { font-family: monospace; }
-		li:first-child, button { display: none; }
 		li input { height: 2em; width: 2em;}
-		li button { position: absolute; }
-		li:hover { background: #eee; }
+		li button { position: absolute; opacity: 0.75; margin-top: 0.4em; display: none;}
 		li [contenteditable]:focus + button,
-		button:focus { display: inline-block;}
-		li:hover button { display: inline-block; } 
+		button:focus ,
+		button:hover { display: inline-block; opacity: 1;}
+		li:hover button { display: inline-block;float: left; } 
 		ul,li{ margin:0.2em 0; padding:0; list-style: none; }
 		li { display: block; font-size: 150%; }
 		[contenteditable]{ display: inline-block; margin: 0 1em; padding: 4px; vertical-align:top; }
 		#task, #task+input { font-size: 125%; padding: 0.2em; }
+		body veneer-persist {display: block;}
+		body veneer-mustache { display: none; }
 	</style>
 </head>
 <body>
 	
-	<h1>Todos</h1>	
+	<h1>Todo List</h1>	
 	
-	<form onsubmit="list.innerHTML+=veneer.template(task, list.querySelector('li').outerHTML ); this.reset(); return false;">
-	
-		<input id=task autofocus placeholder="What needs to be done?"  /> 
-		
-		<input type=submit value=save />
-		
+	<form onsubmit="lister.append(this); reset(); return false; ">
+		<input id=task autofocus required placeholder="What needs to be done?"  > 		
+		<input type=submit value=add >
 	</form>
 	
-	
-	<veneer-persist id=veneertododemo3322>
-		<ul id=list>
-			<li> 
-				<input type=checkbox onchange="setAttribute('checked', checked)" > 
-				<span contenteditable> {{value}} </span>
-				<button onclick="parentNode.remove()" title='Delete this todo item' >X</button>		
-			</li>
-		</ul>
+	<veneer-persist id=veneertododemo>
+		<ul id=list></ul>
 	</veneer-persist>
 
-	<script src="http://danml.com/veneer/lib/veneer.full.min.js"></script>
+	<veneer-mustache id=lister target=#list>
+		<li> 
+			<veneer-input><input type=checkbox name=done></veneer-input>
+			<span contenteditable> {{task.value}} </span>
+			<button onclick=parentNode.remove() title='Delete this todo item' >X</button>		
+		</li>
+	</veneer-mustache>
+		
+	<script src=http://veneer.danml.com ></script>
 	
 </body>
 </html>
