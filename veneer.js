@@ -40,7 +40,6 @@ veneer.include=function(u){
 			doc.documentElement.children[0].appendChild(d);
 		 }
 		 
-		 console.info("req", req)
 		if(!req[1]){
 			inject();
 		}else{
@@ -57,12 +56,36 @@ veneer.include=function(u){
 	});
 };
 
+var refData=[];
+veneer.ref=function(v){
+	if(typeof v!=="object") return refData[v];
+	var id=refData.indexOf(v);
+	if(id==-1) id=refData.length;
+	refData[id]=v;
+	return id;
+};
+
 veneer.on=function on(base, event, selector, fn){
   var u,b=base,m=b.matches||b.webkitMatchesSelector||b.mozMatchesSelector||b.msMatchesSelector, 
   f=fn.call?fn:Function("e",fn);
   (event+'').split(",").map(function(s){b.addEventListener(s.trim(), function(e){ 
      return m.call(e.target, selector) ? f.call(e.target, e) : u;
   }, true);});
+};
+
+ veneer.upon=function upon(event, selector, fn) {
+ 	document.documentElement.addEventListener(event, function(e) {
+ 			veneer.$(selector).forEach(function(elm){
+				fn.call(elm, e);
+			});
+ 	}, true);
+	return upon;
+ };
+ 
+ veneer.extend=function extend(o, o2) { 
+	for (var k in o2) if ([].hasOwnProperty.call(o2, k)) o[k] = o2[k];
+	if (arguments.length > 2) extend.apply(this, [o].concat([].slice.call(arguments, 2)));
+	return o;
 };
 
 //add script(s) by url:
@@ -85,29 +108,7 @@ veneer.requires=function(arrModules, base){
 		}else{
 			setTimeout(function(){ veneer.include( (base2||"") + a ); },n*20);
 		}
-		/*
-		//cache native veneer defs:
-		if( /^\w+$/.test(a){
-			prefix="veneer-"
-				
-			if(x=localStorage["veneer_"+a]){
-			
-				try{return eval(x);}catch(y){console.error(y);}
-			}else{
-				var filePath=(base2||"") +prefix+a+".js" ;
-				setTimeout(function(){			
-					veneer.ajax(filePath, function(str){
-						localStorage["veneer_"+a]=str;
-					});
-				}, (n *2000)+7000);
-			
-			}
-		
-		}
-
-		*/
 	
-		//setTimeout(function(){ veneer.include( filePath ); },n*20);
 	});
 };
 
@@ -243,9 +244,6 @@ veneer.parseElement=function(elm){
    
    var code=(veneer.$('script[type="shadow"]', elm)[0]||"").innerHTML || "";
    
-    //console.info(veneer.$('script[type="shadow"]', elm), code);
-	
-
    
    Object.keys(at).map(function(k){
      if(/^on/.test(k)) return def.events[k.slice(2)]=Function("e", this[k]);
@@ -300,11 +298,11 @@ function veneer(tagName, def){
 		return;
 	}
 	
-	function curry(fn, arrArgs){
+/*	function curry(fn, arrArgs){
 		if(!arrArgs.join){arrArgs=[arrArgs];}
 		return function _curried(){return fn.apply(this, arrArgs.concat([].slice.call(arguments))) };
 	}
-	
+*/	
 	
 	def.events=def.events||{};
 	
@@ -323,7 +321,6 @@ function veneer(tagName, def){
 
 		var that=this; // lets "this" be known as "that" in html event handlers
 
-		that.lang="shadow"; // abuse lang to hit with css and filter event
 		that._def=def; 
 
 		// fire an init event right here
@@ -349,8 +346,6 @@ function veneer(tagName, def){
 			that.addEventListener(evt, action, false); // true);
 		}, def.events||{});
 	
-		//this[evt].bind(that)  needs to bve wrapped and filter bubbling so that only the true elm fires the event, not dub-custom-tags
-		
 		// apply any defaults to "missing" props/attribs
 		if(defs){ 
 			Object.keys(defs).forEach(function(k){ 
@@ -359,10 +354,6 @@ function veneer(tagName, def){
 			}, defs); 
 		}
 	
-	
-
-		
-
 
 		// calls the tag definition's update() event ( if defined )
 		function changeme(){ 
@@ -390,17 +381,21 @@ function veneer(tagName, def){
 	};
 	
 	//aPrototype.attachedCallback=curry(veneer.raiseEvent, "insert" );
-	aPrototype.detachedCallback=curry(veneer.raiseEvent, "remove" );
+	//aPrototype.detachedCallback=curry(veneer.raiseEvent, "remove" );
 
+	aPrototype.detachedCallback= function _remove(e,b){		
+		setTimeout( veneer.raiseEvent.bind(this, "remove", this), 0);
+	};
+	
 
 
 	// bind all methods:
-	Object.keys(methods).map(function(method){
-		aPrototype[method]=this[method];
-	}, methods);
+	Object.keys(methods).map(function(method,_,__){
+		aPrototype[method]=methods[method];
+	});
 	
 	// bind all props to attribs of the same name and subscribe to changes:
-	Object.keys(props).map(function(prop){
+	Object.keys(props).map(function(prop,_,__){
 
 	
 		var def=this[prop] || "",
@@ -435,13 +430,6 @@ function veneer(tagName, def){
 				return this.getAttribute(cfg.attr);
 			}
 		}
-
-//		if(cfg.value !==undefined){
-//			aPrototype[prop]=cfg.value;
-//		}
-
-
-
 	
 		Object.defineProperty(aPrototype, prop, {
 			get: cfg.get,

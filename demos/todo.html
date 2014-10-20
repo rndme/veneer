@@ -7,6 +7,7 @@
 		body { font-family: monospace; }
 		li input { height: 2em; width: 2em;}
 		li button { position: absolute; opacity: 0.75; margin-top: 0.4em; display: none;}
+		#counter,
 		li [contenteditable]:focus + button,
 		button:focus ,
 		button:hover { display: inline-block; opacity: 1;}
@@ -28,13 +29,23 @@
 		<input type=submit value=add >
 	</form>
 	
-	<veneer-persist id=veneertododemo>
+	<label> 
+		<veneer-attriball publish target="#list input">
+			<input type=checkbox> 
+		</veneer-attriball> 
+		Mark all as complete 
+	</label>
+	
+	
+	<veneer-persist id=veneertododemo onchange=counter.render()>
 		<ul id=list></ul>
 	</veneer-persist>
 
+	Item Count: <veneer-mustache id=counter object="veneer.$('#list :checked')"> {{length}} </veneer-mustache>
+
 	<veneer-mustache id=lister target=#list>
 		<li> 
-			<veneer-input><input type=checkbox name=done></veneer-input>
+			<veneer-input><input type=checkbox></veneer-input>
 			<span contenteditable> {{task.value}} </span>
 			<button onclick=parentNode.remove() title='Delete this todo item' >X</button>		
 		</li>
