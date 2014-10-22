@@ -2,7 +2,7 @@
  {
 	tagName: 'veneer-hello',
 	version: '1.0.0',
-	purpose: 'defines a <hello-world> element that says hello to the who attribute value ',
+	purpose: 'defines a <hello-world> element that says hello to the who attribute value. (for the helloworld.html demo) ',
 	attribs: { who: 'a string name' },
 	events:  [ 'update' ]
  }
@@ -10,7 +10,7 @@
 
 //////////////////////////////////////////////
  
- veneer("hello-world", {
+veneer("hello-world", {
 	content: "Hello  <strong></strong> :)", 
 	events: {
 		update: function(e){ 
@@ -24,6 +24,4 @@
 	defaults:{
 		who: "Anon"
 	}
-	
-  });
-  
+});
