@@ -41,7 +41,10 @@
 		<ul id=list></ul>
 	</veneer-persist>
 
-	Item Count: <veneer-mustache id=counter object="veneer.$('#list :checked')"> {{length}} </veneer-mustache>
+	Done: 
+	<veneer-mustache id=counter object="{done:veneer.$('#list :checked').length, total:list.children.length}">
+			{{done}} / {{total}}	
+	</veneer-mustache>
 
 	<veneer-mustache id=lister target=#list>
 		<li> 
@@ -52,6 +55,9 @@
 	</veneer-mustache>
 		
 	<script src=http://veneer.danml.com ></script>
+	
+	<hr />
+	<a href=".">Back to Demos</a> &nbsp;	<a href="/veneer/">Veneer Home</a>
 	
 </body>
 </html>
