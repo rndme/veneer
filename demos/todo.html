@@ -37,7 +37,7 @@
 	</label>
 	
 	
-	<veneer-persist id=veneertododemo onchange=counter.render()>
+	<veneer-persist id=veneertododemo onchange=counter.change()>
 		<ul id=list></ul>
 	</veneer-persist>
 
@@ -46,7 +46,7 @@
 			{{done}} / {{total}}	
 	</veneer-mustache>
 
-	<veneer-mustache id=lister target=#list>
+	<veneer-mustache id=lister target=#list onchange=counter.change()>
 		<li> 
 			<veneer-input><input type=checkbox></veneer-input>
 			<span contenteditable> {{task.value}} </span>
@@ -54,7 +54,8 @@
 		</li>
 	</veneer-mustache>
 		
-	<script src=http://veneer.danml.com ></script>
+	<!--<script src=http://veneer.danml.com ></script>-->
+	<script src=http://danml.com/veneer/lib/veneer.full.src.js ></script>
 	
 	<hr />
 	<a href=".">Back to Demos</a> &nbsp;	<a href="/veneer/">Veneer Home</a>
