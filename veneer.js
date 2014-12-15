@@ -83,6 +83,13 @@ veneer.on=function on(base, event, selector, fn){
 	return upon;
  };
  
+veneer.resolve=function(path, base) { 
+	return path.reduce(function(o, k,_,__) {
+		var v=o&&o[k];
+		return typeof v==="function"?v.call(o):v;
+	}, base||Window);
+};
+
  veneer.extend=function extend(o, o2) { 
 	for (var k in o2) if ([].hasOwnProperty.call(o2, k)) o[k] = o2[k];
 	if (arguments.length > 2) extend.apply(this, [o].concat([].slice.call(arguments, 2)));
@@ -205,6 +212,7 @@ veneer.pluck=function pluck(a){ return a[this]; };
 veneer.from=function from(a){ return this[a]; };
 veneer.set=function to(a){ return a[this[0]]=this[1]; };
 veneer.k=function k(a){ return a; };
+veneer.unique=function(a,b,c){return c.indexOf(a)==b;};
 veneer.date=function(n){return new Date(n||Date.now());};
 veneer.hms=function(s){return new Date(1000*s).toISOString().split("T")[1].split(".")[0];};
 veneer.parseElement=function(elm){
@@ -363,9 +371,10 @@ function veneer(tagName, def){
 	
 
 	// watch all attribs for changes, firing change() if needed to sync attrib+props
-	aPrototype.attributeChangedCallback= function _change(e,b){		
+	aPrototype.attributeChangedCallback= function _change(e,old,v){	
 		if(e=="lang" || e=="class"){return; }
-		if(this.change && this._def  && this._def  && this._def.props && this._def.props[e] ){this.change();}		// this line breaks firefox
+		if(this.change && this._def  && this._def  && this._def.props && this._def.props[e] ){this.change({
+			type:"attr", key:e, value: this._def.props[e](v), old: this._def.props[e](old), target: this});}
 	};
 
 	aPrototype.attachedCallback= function _insert(e,b){		
