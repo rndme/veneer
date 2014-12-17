@@ -1,0 +1,58 @@
+<!doctype html><html><head> 
+	<meta charset="utf-8">
+	<title> veneer demo </title>	
+	<meta name=author content="dandavis">	
+	<meta name=description content="">	
+	<link rel=stylesheet href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+</head>
+<body class=container id=body>	
+
+<h1>Sorting a list</h1>
+
+<main id=main>
+
+
+<!-- sort tag sorts a target tag by a property/attrib of it's children, using a select to offer choices -->
+<veneer-sort target=#mylist> 
+	<!-- the select is used to choose a property or attribute of the targets to compare by. 
+		point each <option> at a different attrib, path, or property.
+		calling sort reverses the ordering, which is usually what the user wants.
+		
+		in short: user selects a field then myList (the <ul>) is sorted by the value of the <option> selected
+		-->
+	<select>
+		<option value="" 				title="leaving the comapre field blank uses the default text compare">	Re-Order</option>
+		<option value=@value 				title="@ prefix forces getAttribute instead of a mere property get">	Orig</option>
+		<option value=textContent 			title="the default, sorting by the content without markup" >		Alpha</option>
+		<option value=textContent.length 		title="you can point past the property into sub-properties if needed" >	Word Length</option>
+		<option value=textContent.1.trim 		title="sub properties can be index properties or methods" >		2nd Letter</option>
+		<option value=".textContent.split('').pop()" 	title="start with a dot to use a JS expression. (dynamic code)" >	Last Letter</option>
+		
+	</select>
+	
+	<button onclick=parentNode.change()>Flip</button> <!-- applying again reverses the sort -->
+</veneer-sort>
+
+
+<hr />
+
+<!-- a plain-jane unordered list:  -->
+<ul id=mylist>
+	<li value=0>Be</li>
+	<li value=1>The</li>
+	<li value=2>Change</li>
+	<li value=3>You</li>
+	<li value=4>Wish</li>
+	<li value=5>To</li>
+	<li value=6>See</li>
+	<li value=7>In</li>
+	<li value=8>The</li>
+	<li value=9>World</li>
+</ul>
+
+</main>
+
+<footer id=footer> <a href="./"> Back to gists </a>  </footer>
+<script src="http://danml.com/veneer/lib/veneer.full.src.js"></script>
+</body>
+</html>

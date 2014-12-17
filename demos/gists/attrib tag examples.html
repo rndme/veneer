@@ -1,0 +1,76 @@
+<!doctype html><html><head> 
+	<meta charset="utf-8">
+	<title> veneer demo </title>	
+	<meta name=author content="dandavis">	
+	<meta name=description content="">	
+	<link rel=stylesheet href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+</head>
+<body class=container id=body>	
+
+<h1>Attrib tag to alter attributes and extend buttons</h1>
+
+<main id=main>
+
+<fieldset>	
+	<legend> Fill a form input value from a drop-down list of pre-selected values </legend>
+
+	The input <input id=inp1> 
+
+	<veneer-attrib target=#inp1 >
+		<select>
+			<option value="">Choose a Default</option>
+			<option>Abc</option>
+			<option>123</option>
+			<option>Xyz</option>
+		</select>
+	</veneer-attrib>
+
+</fieldset>
+
+
+
+
+
+<fieldset>	
+	<legend> Fire methods on any tag </legend>
+	The input <input id=inp2 value=12345 />   <br />
+
+	<veneer-attrib target=#inp2 prop=focus ><button>Focus</button></veneer-attrib>	
+	<veneer-attrib target=#inp2 prop=blur ><button>Blur</button></veneer-attrib>	
+	<veneer-attrib target=#inp2  prop=select ><button>Select</button></veneer-attrib>	
+	<veneer-attrib target=#inp2  prop=selectionStart ><button value=6>Un-Select (not a method)</button></veneer-attrib>
+	
+</fieldset>
+
+
+
+<fieldset>	
+	<legend>Chaining several inputs together </legend>
+
+	The input <input id=inp3 subscribed="veneer-attrib[target='#inp3'] input"> 
+
+	<veneer-attrib target=#inp3 id=va1><input></veneer-attrib>
+	<veneer-attrib target=#inp3 id=va2><input></veneer-attrib>
+	<veneer-attrib target=#inp3 id=va3><input></veneer-attrib>
+	<veneer-attrib target=#inp3 id=va4><input></veneer-attrib>
+	<veneer-attrib target=#inp3 id=va5><input></veneer-attrib>
+	<veneer-attrib target=#inp3 id=va6><input></veneer-attrib>
+
+</fieldset>
+
+
+
+
+</main>
+<style> 
+
+/* reveal value attribs on UL's LIs */
+ ul li:before {content: attr(value); color: red; padding-right: 1em; }
+ fieldset { margin: 3em 0; }
+</style>
+
+<footer id=footer> <a href="./"> Back to gists </a>  </footer>
+<script src="http://veneer.danml.com/"></script>
+
+</body>
+</html>

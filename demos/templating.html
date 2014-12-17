@@ -1,0 +1,54 @@
+<!DOCTYPE html><html><head> 	<title>Template Demo</title>
+	<meta charset='utf-8'>	
+	<meta name=description content="templates are flexible in veneer">
+	<meta name=author content="dandavis">
+	<style>
+	body { visibility: hidden; }
+	.veneer body { visibility: visible; }
+	</style>
+</head><body id=body class=container>	  
+	<veneer-bootstrap></veneer-bootstrap>
+	<veneer-attributes> section { class=col-md-4 }</veneer-attributes> 
+	<a href=".">Back to Demos</a> &nbsp;	<a href="/veneer/">Veneer Home</a> <hr />	  
+<section>
+	<h3>tag list</h3>
+	<veneer-sort target=#tags>
+		<select id=so>
+			<option value="">Sort By</option>
+			<option value="@title">Document Order</option>
+			<option value="@data-tag">Alphabetical Order</option>
+		</select>
+		<button onclick="so.onchange.call(so, {target:so})" >flip</button>
+	</veneer-sort>
+	<veneer-mustache object="{x:veneer.$('*')}">
+	  <ul id=tags>{{#x}}
+	   <li data-tag={{tagName}} title={INDEX} >{INDEX}. {{tagName}} :: <small>{{children.length}} children</small> and <code>{{outerHTML.length.toLocaleString}} chars</code></li>
+	 {{/x}}</ul> 
+	</veneer-mustache>   
+</section>
+
+<section>
+	<h3>50 Random Numbers</h3>
+	filter <veneer-filter target=#nums></veneer-filter> 
+	<veneer-attrib target=#lister attrib=render><input type=button value=regen></veneer-attrib>
+	<veneer-mustache object="{numbers:Array(50)}" id=lister>
+	 <ol id=nums>{{#numbers}}
+	   <li >#{INDEX}:  {{|Math.random|Math.acos}}</li>
+	 {{/numbers}}</ol> 
+</veneer-mustache> 
+</section>  
+
+<section>
+	<h3>object list</h3>	  	  
+	<veneer-mustache object="{ scope : Object.getOwnPropertyNames(window) }">
+	 filter <veneer-filter target=#props></veneer-filter>
+	 <ul id=props>{{#scope}}
+	   <li> {INDEX} {{.}} </li>
+	 {{/scope}}</ul> 
+	</veneer-mustache>
+</section>
+
+<br clear=both> <h3 nolink>&copy 2014, dandavis</h3>  
+
+<script src="http://danml.com/veneer/lib/veneer.full.src.js"></script>
+</body></html>

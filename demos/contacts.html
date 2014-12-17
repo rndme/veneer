@@ -1,0 +1,160 @@
+<!DOCTYPE html><html><head>
+	<title>contacts demo</title>
+	<meta charset='utf-8'>	
+
+	<meta name=description content="router, navigation, and sectioning meets css, html, and js">
+	<meta name=author content="dandavis">
+
+<style>
+	body { visibility: hidden; }
+	.veneer  body { visibility: visible; }
+	body a{ text-decoration: none !important;}
+	body label { display: block; }
+	label b { display: inline-block; width: 5em; }	
+	
+	body ul,	
+	body li { display: block; margin:0; margin-bottom: 0.15em;  }
+	body ul { padding-top: 1em; }
+	li:hover { color: blue; }
+	
+	li b {display: inline-block; width: 10em; }
+	li .tel {display: inline-block; width: 8em; }
+	li a { padding:0.4em 0; display: inline-block;  } 
+	#form { margin-bottom: -21em;}
+	.noed { display: none; }
+	
+	/* hide un-needed delete button when creating a new contact */
+	body[data-type="undefined"] .del { display: none; }
+	
+	/* slide sections out to the left: */
+	#viewbox, 
+	[route='#remove'], 
+	#form {  left: -125%; opacity: 0.4;  position: relative;  transition: 350ms 130ms left; display: block !important; }
+	
+	/* slide active sections into view */
+	body[data-nav-section="remove"] [route='#remove'],
+	body[data-path="/"] #viewbox,
+	body[data-nav-section="edit"] #form {   left: 0; opacity: 1;  }
+	
+	/* make edit form scoot out the way quicker while deleting: */
+	html body[data-nav-section="remove"] #form {  position: absolute; }
+	
+	/* pluralize contact when viewing list */
+	body[data-path="/"]  .noed { display: inline; }
+
+	footer { margin-top: 3em; border-top: 1px solid #bbb}
+</style>
+</head>
+<body id=body class=container data-mode=view data-path=/ >
+
+<h2  class=col-md-12>Contact<span class=noed>s</s> 
+	
+</h2>
+
+
+<!-- this little section is used to indicate to the user that something is being removed -->
+ <div route=remove onroute=setTimeout(veneer.ROUTE.home,500) class=col-md-5>
+	<h3>Removing...</h3>
+	<progress indeterminate></progress>
+ </div>
+ 
+ 
+ 
+ 
+ 
+<!-- edit form uses veneer-item, which is like a form, but has r+w .value: an object containing the serialized element values -->
+<veneer-item id=form class=col-md-5 route=edit/  onroute=editItem(e.page-1) >
+	<label><b>First</b>	<input name=first /></label>
+	<label><b>Last</b> 	<input name=last /></label>
+	<label><b>Tel</b> 	<input name=tel type=tel /></label>
+	<label><b>City</b>	<input name=city /></label>
+	
+	<hr />
+	<!-- actions look like buttons, changing navigation and performing actions if needed -->
+	<a href=# onclick=save(parentNode.value,PAGE-1) class='btn btn-success'>Save</a> &nbsp; 
+	<a href=# class='btn btn-warning'>Cancel</a>
+	<a onclick=forgetIndex(PAGE-1) class='btn btn-danger pull-right del'>Remove</a>
+</veneer-item>
+
+
+<!-- this section is where the list and filter controls live -->
+<section id=viewbox route=/ onroute=form.reset() >
+
+	<!-- add a search/filter feature to the contact list -->
+	<veneer-filter target="#listing ul" placeholder=" Filter... " class=col-md-3 ></veneer-filter> 
+	
+	<!-- actions look like buttons -->
+	<a href=#edit class='btn btn-success btn-sm col-md-1' >New...</a>
+
+	<!-- the mustache template turns JS contacts array into HTML -->
+	<veneer-mustache id=listing object=window>
+		<ul class=col-md-10>
+			<!-- iterate the contacts, and turn each one into a LI tag: -->
+			{{#contacts}} 
+				<li>
+					<a href=#edit/{INDEX}/>
+						<b>{{last}}, {{first}}</b>
+						<span class=tel>{{tel}}</span>
+						<small>{{city}}</small>
+					</a>
+				</li>
+			{{/contacts}}
+		</ul> 
+	</veneer-mustache>
+
+</section>
+ 
+
+ <!-- route tag provides hash history and body attribs for css 
+	compare to http://danml.com/veneer/demos/junk/contacts-noroute.html to see how it cuts code 
+ -->
+<veneer-route globals></veneer-route>
+
+<!-- loads bootstrap -->
+<veneer-bootstrap></veneer-bootstrap>
+
+<footer class=col-md-12>
+	<a href="" onclick="localStorage.contacts='';">Reset Data</a> &nbsp; &nbsp;
+	<a href=".">Back to Demos</a> &nbsp; &nbsp;
+	<a href="/veneer/">Veneer Home</a>
+</footer>
+	
+<!-- gotta have veneer! -->
+<script src=//veneer.danml.com ></script>
+<script>
+// load localStorage saved or demo data :
+var contacts= JSON.parse(localStorage.contacts||0) || [
+	{"first":"Jane","last":"Clinton","city":"New York, NY","tel":"232-476-3867"},
+	{"first":"Ross","last":"Edwards","city":"Atlanta, GA","tel":"695-003-1530"},
+	{"first":"Sally","last":"Freer","city":"Chicago, IL","tel":"235-430-4469"},
+	{"first":"Jennifer","last":"Gill","city":"Seattle, WA","tel":"640-943-1386"},
+	{"first":"Bob","last":"Jones","city":"St. Louis, MO","tel":"281-839-4093"},
+	{"first":"John","last":"Roberts","city":"Oakland, CA","tel":"678-138-1773"},
+	{"first":"Kelly","last":"Ross","city":"Dallas, TX","tel":"637-009-4651"},
+	{"first":"Sam","last":"Sandburg","city":"Miami, FL","tel":"794-116-5752"},
+	{"first":"John","last":"Smith","city":"Seattle, WA","tel":"331-468-3325"},
+	{"first":"Jeff","last":"Stevenson","city":"Washington, D.C.","tel":"759-010-2395"}
+];
+
+
+// define application logic as a set of basic operations:
+
+ function editItem(slot){	// shows the edit form and populates with an existing contact, if specified
+	body.dataset.type=contacts[slot];	// toggle [Remove] button
+	form.value=contacts[slot]||{};			// update form inputs w/ contact data
+ }
+ 
+ function save(o, slot){	// saves the edit form value to contact list
+ 	if(o) contacts[slot-.1?slot:contacts.length]=o;	// if passed an object, put it in the slot or append it if no slot
+	localStorage.contacts=JSON.stringify(contacts);	// save the contacts to localStorage as json
+ }
+  
+ function forgetIndex(slot){	// removes a contact by index position
+	contacts.splice(slot, 1);	// remove the index at slot (DI)
+	save();				// save 
+	location.replace('#remove');	// and go back to list in a way that prevents "back" button nav to deleted item
+ }
+ 
+</script>
+</body>
+</html>

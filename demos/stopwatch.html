@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head> 	<title>Stopwatch Demo</title>
+	<meta charset='utf-8'>	
+	<meta name=description content="run many timers with veneer">
+	<meta name=author content="dandavis">
+	<style>
+	body { visibility: hidden; font-size: 120%; font-family: sans-serif; }
+	.veneer body { visibility: visible; }
+	veneer-mustache {display:none;}
+	veneer-timer { font-family: monospace; font-weight: bold;}
+	#list li { list-style: none; margin-bottom: 1em;  margin: 1em 0; }
+	button, veneer-timer { font-size: 350%; }
+	button:hover { color: blue; }
+	li:hover { background-color: #ddd; cursor: default; }
+	li button { vertical-align: top; background: transparent; border: 0;margin: -0.15em 0.5em 0 0.3em;  cursor: pointer;} 
+	li,ul{ vertical-align: middle; padding:0; margin:0;}
+	li button.pau { font-size: 320%; }
+	</style>
+</head><body id=body class=container>	  
+		<a href=".">Back to Demos</a> &nbsp;	<a href="/veneer/">Veneer Home</a> <br />	  
+
+<!-- a button to add a new timer to the top of the list -->
+<button onclick=timer.prepend(window)>Add New Timer</button>
+		
+<!-- show out timers in a list -->
+<ul id=list></ul>
+
+
+<veneer-mustache id=timer target=#list ><template>
+	<li>
+		<button onclick='parentNode.remove()' > x </button>
+	<veneer-timer repeat 
+			interval=500  
+			num={{|Date.now}} 
+			onchange="innerHTML=veneer.hms( (Date.now()-num) /1000 )"  >00:00:00</veneer-timer> 
+		<button onclick='previousElementSibling.cancel();remove();' class=pau > &#9632; </button>
+	</li></template>
+</veneer-mustache>
+		
+		
+		
+		
+		
+		
+
+<script src="http://veneer.danml.com/"></script>
+</body></html>

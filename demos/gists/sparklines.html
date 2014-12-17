@@ -1,0 +1,58 @@
+<!doctype html><html><head> 
+	<meta charset="utf-8">
+	<title> veneer demo </title>	
+	<meta name=author content="dandavis">	
+	<meta name=description content="">	
+	<link rel=stylesheet href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+</head>
+<body class=container id=body>	
+
+<h1>Graphing data with sparklines</h1>
+
+<main id=main>
+
+<h2>Basic examples </h2>
+
+	<h4>Bars</h4>
+	<veneer-sparkline data="5,10,15,20,5,10,15,20,15,4,5,10,15,20,5,10,15,20,15,4,1"></veneer-sparkline>
+
+	<h4>Line</h4>
+	<veneer-sparkline type="line" data="5,10,15,20,25,22,18,12,6"></veneer-sparkline>
+	
+	<h4>Blue Bars</h4>
+	<veneer-sparkline color="blue" data="5,10,2,6,14,6,8,12,4"></veneer-sparkline>
+	
+
+	
+	
+	
+<h2>Custom CSS on above basic examples </h2>
+
+	<h4>Color-Coded Bars</h4>
+	<veneer-sparkline class=css data="5,10,15,20,5,10,15,20,15,4,5,10,15,20,5,10,15,20,15,4,1"></veneer-sparkline>
+
+	<h4>Dotted Line</h4>
+	<veneer-sparkline class=css type="line" data="5,10,15,20,25,22,18,12,6"></veneer-sparkline>
+	
+	<h4>Hollow Blue Bars</h4>
+	<veneer-sparkline class=css color="blue" data="5,10,2,6,14,6,8,12,4"></veneer-sparkline>
+	
+
+<style>
+
+ /* style first example to color-code it's bars by value:  */
+.css:not([type]) .seq[title='20']{ background-color: red; } 
+.css:not([type]) .seq[title='15']{ background-color: orange; }
+.css:not([type]) .seq[title='10']{ background-color: yellow; }
+
+
+</style>	
+	
+	
+
+</main>
+
+<footer id=footer> <a href="./"> Back to gists </a>  </footer>
+<script src="http://veneer.danml.com/"></script>
+</body>
+</html>

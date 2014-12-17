@@ -1,0 +1,127 @@
+<!DOCTYPE html><html><head>
+	<title>contacts demo</title>
+	<meta charset='utf-8'>	
+
+	<meta name=description content="router, navigation, and sectioning meets css, html, and js">
+	<meta name=author content="dandavis">
+
+<style>
+	body { visibility: hidden; }
+	.veneer  body { visibility: visible; }
+	
+	body label { display: block; }
+	label b { display: inline-block; width: 5em; }	
+	
+	body ul,	li { cursor: pointer; display: block; margin:0; margin-bottom: 0.3em; padding:0.3em 0; }
+	body ul { padding-top: 1em; }
+	li:hover { color: blue; }
+	
+	li b {display: inline-block; width: 10em; }
+	li .tel {display: inline-block; width: 8em; }
+
+	#form { margin-bottom: -21em;}
+	#viewbox, #form { left: 0; position: relative;  transition: 350ms 130ms left; }
+	body[data-mode='edit'] #viewbox,
+	body[data-mode='view'] #form {  left: -105%; opacity: 0.4; }
+	
+	body[data-mode='view'] #viewbox,
+	body[data-mode='edit'] #form {   left: 0; }
+	
+	.noed { display: none; }
+	body[data-mode='view'] .noed { display: inline; }
+	
+	body[data-type="undefined"] .del { display: none; }
+</style>
+</head>
+<body id=body class=container data-mode=view>
+
+<h2  class=col-md-12>Contact<span class=noed>s</s></h2>
+
+
+<!-- veneer-item is like a form, but has r+w value property: an object containing the serialized element values -->
+<veneer-item id=form class=col-md-5 >
+	<label><b>First</b>	<input name=first /></label>
+	<label><b>Last</b> 	<input name=last /></label>
+	<label><b>Tel</b> 	<input name=tel type=tel /></label>
+	<label><b>City</b>	<input name=city /></label>
+	
+	<hr />
+	
+	<button onclick="save(parentNode.value);" class='btn btn-success'>Save</button> &nbsp; 
+	<button onclick="displayList(true)" class='btn btn-warning'>Cancel</button>
+	<button onclick="forgetIndex(parentNode.index)" class='btn btn-danger pull-right del'>Remove</button>
+</veneer-item>
+
+
+<section id=viewbox>
+
+	<!-- add a search/filter feature to the contact list -->
+	<veneer-filter target="#listing ul" placeholder=" Filter... " class=col-md-3 ></veneer-filter> 
+	
+	<button class='btn btn-success btn-sm col-md-1'
+			onclick="editItem({}, contacts.length+1)">New...</button>
+
+	<veneer-mustache id=listing object=window>
+		<ul class=col-md-10>
+			{{#contacts}}
+				<li onclick='editItem(veneer.ref({{..|veneer.ref}}), {INDEX})'>
+					<b>{{last}}, {{first}}</b>
+					<span class=tel>{{tel}}</span>
+					<small>{{city}}</small>
+				</li>
+			{{/contacts}}
+		</ul> 
+	</veneer-mustache>
+
+</section>
+ 
+
+<veneer-bootstrap></veneer-bootstrap>
+
+<script src=/js/strongbox.js ></script>
+<script src=//veneer.danml.com ></script>
+<script>
+// load saved or demo data :
+var contacts= strongbox.get("contacts") || [
+	{"first":"Jane","last":"Clinton","city":"New York, NY","tel":"232-476-3867"},
+	{"first":"Ross","last":"Edwards","city":"Atlanta, GA","tel":"695-003-1530"},
+	{"first":"Sally","last":"Freer","city":"Chicago, IL","tel":"235-430-4469"},
+	{"first":"Jennifer","last":"Gill","city":"Seattle, WA","tel":"640-943-1386"},
+	{"first":"Bob","last":"Jones","city":"St. Louis, MO","tel":"281-839-4093"},
+	{"first":"John","last":"Roberts","city":"Oakland, CA","tel":"678-138-1773"},
+	{"first":"Kelly","last":"Ross","city":"Dallas, TX","tel":"637-009-4651"},
+	{"first":"Sam","last":"Sandburg","city":"Miami, FL","tel":"794-116-5752"},
+	{"first":"John","last":"Smith","city":"Seattle, WA","tel":"331-468-3325"},
+	{"first":"Jeff","last":"Stevenson","city":"Washington, D.C.","tel":"759-010-2395"}
+];
+
+
+// define application logic as a set of basic operations:
+
+ function displayList(){
+	listing.render();		// update the list with new data
+	body.dataset.mode="view";	// set view mode to show list
+ }
+
+ function editItem(o, slot){
+	body.dataset.mode="edit";		// set view mode to show editor
+	body.dataset.type=contacts[slot];	// toggle [Remove] button
+	form.reset(); 				// reset form controls
+	form.index=slot-1;			// slot to replace changes (template index is 1-based)
+	form.value=o;				// update form inputs w/ contact data
+ }
+ 
+ function save(o){
+	if(o) contacts[form.index]=o;		//	if passed an object, put it in the slot
+	strongbox.save("contacts", contacts);	// save the contacts to localStorage
+	displayList();				// go back to the list
+ }
+  
+ function forgetIndex(slot){
+	contacts.splice(slot, 1);	// remove the index at slot (DI)
+	save();				// save and go back to list
+ }
+ 
+</script>
+</body>
+</html>

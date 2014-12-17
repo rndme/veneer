@@ -1,0 +1,33 @@
+<!doctype html><html><head> 
+	<meta charset="utf-8">
+	<title> veneer demo </title>	
+	<meta name=author content="dandavis">	
+	<meta name=description content="">	
+	<link rel=stylesheet href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+</head>
+<body class=container id=body>	
+
+<h1></h1>
+
+<main id=main>
+		<!-- Builds an object from the inner form controls by name and value -->
+		
+		<veneer-item id="myItem" onchange='viewer.value=JSON.stringify(this.value, null, "\t")'>
+			<label> Name <input name="name" type="text" value="Jane"> </label>
+			<label> Age <input name="age" type="number" min="1" max="99" value="22"> </label>
+				<label>  <input name="male" type="checkbox"> Male </label>
+		</veneer-item>
+		<hr>
+		<h3>Item tag value</h3>
+		<textarea cols=80 rows=10 id=viewer></textarea>
+		<p> It works to write the value as well. Edit property values in the JSON and click 
+			 <button onclick="myItem.value=JSON.parse(viewer.value)" >Apply JSON</button>
+		</p>
+</main>
+
+
+<footer id=footer> <a href="./"> Back to gists </a>  </footer>
+
+<script src="http://veneer.danml.com/"></script>
+</body>
+</html>

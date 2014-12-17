@@ -1,0 +1,369 @@
+<!DOCTYPE html><html><head>
+	<title>routing : loading</title>
+	<meta charset='utf-8'>	
+
+	<meta name=description content="router, navigation, and sectioning meets css, html, and js">
+	<meta name=author content="dandavis">
+
+<style>
+/* show current nav item */
+nav .routed { font-weight: bold; border-bottom: 2px solid red; }
+
+/* define a page transition while navigating to indicate activity: */
+body[data-navigating] {
+  background-color: #e3e3e3;
+  transition: 150ms background;
+}
+
+/* make the search section stand out using css */
+[data-nav-section=search] { background-color: thistle; }
+
+
+/* color error content red */
+[route='404'] { color: red; }
+
+/* this rule is also defined by veneer's route module, but putting it in the HEAD reduces FOUC on really slow connections: */
+[route] { display:none; }
+
+/* hide everything until veneer is ready */
+body { visibility: hidden; }
+.veneer body { visibility: visible; }
+
+/* just for looks */
+nav a { margin-right: 1em; text-decoration: none !important; background-color: transparent; transition: 450ms background-color;}
+dt { margin-top: 1em; }
+code em { opacity: 0.75; color: #152; text-style: none; }
+[nonav] { opacity: 0.6; }
+
+</style>
+
+<noscript><style>/* noscript barebones functionality (requires [id]s that dupe [route]) */
+veneer-mustache {display: none; }
+body, :target{ visibility: visible; display: inherit; display: initial; }
+</style></noscript>
+
+</head>
+<body id=body class=container>
+
+<h3>Routing demo</h3>
+
+<nav id=nav>
+	<a href="#/">home</a>
+	 <a href="#features/main">main features</a>
+	  <a href="#features/unique">unique features</a>
+	  <a href="#features/events">events</a>
+	  <a href="#features/properties">properties</a>
+	<a href="#features/history">history</a>
+	<a href="#onleave">onleave</a>
+	<a href="#search?name=fred&age=28">query params</a>
+	<a href="#content">external </a>
+	<a href="#remote?state=CA">remote </a>
+	<a href="#someFakeSection">missing</a> 
+</nav>	 
+
+<hr />
+
+<!-- content "pages" and other route endpoints are defined via the route attrib  -->
+
+
+<!-- breadcrumbs -->
+<section route="rx:.*" nonav > <!-- the nonav attribute stops it being counted as a section that prevents the 404 detection -->
+ <h4><veneer-mustache object='veneer.ROUTE'>  / {{^argv}}Home{{/argv}}  {{#argv}} {{.}} {SEP} / {/SEP} {{/argv}} / </veneer-mustache></h4>
+</section>
+ 
+
+<!-- this one-page section uses a panel to show content from a different url (aka an import) -->
+<section route="content"> a content section with external content
+  <veneer-panel src="http://danml.com/veneer/demos/tablesorter.html"></veneer-panel>
+</section>
+
+
+<!-- this appears on the "home page" (no section, no page, no sub-page) -->
+<section route="/" id="/" > 
+
+	<h3>What</h3>
+	<p>veneer-route is a declarative HTML-based router for true single page navigation.
+	The route tag enables single-page apps to use bookmarks, back/forward navigation, provides equivalents to onload() and onbeforeunload() events, enables wildcard route matching, auto-refreshes templates, and more. View this page's source to see how easy veneer-route is to integrate into any project.
+	</p>
+
+	<h3>Why</h3>	<p>
+	Reloading pages is slow, but switching urls is good. The problem with doing it all client-side is that there is not a straight-forward way to provide those features with the simplicity of a server. As a result, <a href="http://microjs.com/#route">virtually all client-side routers</a> and "history managers" require custom javascript in a proprietary  format to re-describe what the html A tag was designed for. veneer-route allows managers, designers, and anyone familiar with HTML to create a blazing fast single-load user experience, without the constraints of a framework or hand-wiring simple connections.
+	</p>
+
+	<h3>How</h3>
+	<ol>
+		<li> Use normal anchor tags to link to logical url fragments <code><veneer-html> <a href="#about/contact">Contact Us</a> </veneer-html> </code>
+		<li> Tie html containers of content to urls with route attributes <code><veneer-html> <div route=/about/contact > Coming Soon! </div> </code>
+		<li> Add the veneer script tag and a veneer-route tag to the page <code>&lt;veneer-route&gt;&lt;/veneer-route&gt; 
+		&lt;script src="/veneer/lib/veneer.full.min.js"&gt;&lt;/script&gt; </code>
+		<li> Brush up the content, enhance the UX, or tweak the CSS, that's it.
+	</ol>
+ 
+</section>
+
+
+
+<!--    note end slash  ↓ - this appears if the section is features, no matter the page or sub-page  -->
+<section route="features/"> <h2>Router Features </h2></section> 
+
+
+<!-- this conditional/wildcard section uses a RegExp to match features section sub-pages starting with the letter u --> 
+<section route="rx:features/u.*"> [features section, page name starts with "u" header] </section>
+
+
+<!-- appears in features section under the main page -->
+<section route="features/main"> <h3>Main Features</h3>
+<ul>
+  <li>Hash-based client side routing with working back/forward buttons and bookmarking</li>
+  <li>Uses <i>route</i> attribute to associate a particular HTML tag with a route</li>
+  <li>Simple static route configuration or advanced partial-url matching via RegExp</li>
+  <li>Injects route meta into BODY tag for CSS-based section/page customization</li>
+  <li>Event-driven core responds to a full compliment of client-side actions and conditions </li>
+  <li>Parses GET-style parameters on hash fragments (#internal/employees/lookup?name=fred&amp;age=21)</li>
+</ul>
+</section>
+
+
+<!-- appears in features section under the unique page, and has an onroute handler, which works like onload() on physical webpages -->
+<section route="features/unique"> 
+
+<h3>Unique Features</h3>
+<ul>
+  <li>Fully declarative HTML config, no custom JavaScript required</li>
+  <li>Multiple Route Matching - Display many fragments from one url, not just full pages</li>
+  <li>Can work without JavaScript, albeit in a very limited manner that only shows/hides exact route matches (disable js to preview)</li>
+  <li>document.title updating based on link text or another property</li>
+  <li>HTML body tag attrib population for easy CSS integration ([data-nav-page], [data-nav-section], [data-nav-sub], [data-nav-path] ) </li> 
+  <li>Temporary body tag attrib for indicating navigation changes [data-navigating]</li>
+  <li>Built in 404 error handling for missing routes</li>
+  <li>JSON-compatible history tracks meta, duration, scroll position, referring link, and more for predictive caching, analytics, custom undo via back, auto-UI-customization, etc</li>
+  <li>Toggles classes on anchors linking to the current route</li>
+  <li>Auto re-renders visible veneer-mustache templates for up-to-the-minute views </li>
+  <li>Events - alternatives for load, hashchange, and beforeunload, as well as novel route and leave events on matched sections </li>
+</ul>
+
+</section>
+
+
+<!-- appears in features section under the properties page, and has an onroute handler, which works like onload() on physical webpages -->
+<section route="features/properties"> 
+
+<h3>Event object properties</h3>
+<code><pre>
+{
+	href:	"http://danml.com/veneer/demos/routing.html#search?name=fred&age=29", <em>// full full url</em>
+	url: 	"search?name=fred&age=29", <em>// full hash url</em>
+	argv: [		<em>// array non-null hash path segments</em>
+		"search"
+	],
+	query: {	<em>// queryString parameters as a JS object</em>
+		name: "fred",
+		age: 29  <em>// numbers are parsed, all other types are strings</em>
+	},
+	section:	"search",<em>// the root section</em>
+	page:		null,	<em>// a page in a section</em>
+	sub:		null,	<em>// a sub-section in a page</em>
+	path: 		"search",<em>// hash path </em>
+	date:	1413326261696,	<em>// date stamp as number</em>
+	oldURL:	"features",	<em>// hash path of last visit (called oldURL to mimic W3 hashchange event args)</em>
+	ref:	"search"   	<em>// hash URL of active link tag (how you got here) </em>
+	pos:	123,		<em>// vertical scroll position of browser at time of event</em>
+	dur:	11.12		<em>// route visit duration in seconds	</em>
+}
+</pre></code>
+
+</section>
+
+
+<!-- appears in features section under the events page, and has a route handler defined in script, which works like onload() on physical webpages -->
+<section route="features/events/"> 
+<h3>Navigation raises many events in different places</h3>
+
+<dl>
+	<dt>route</dt>
+	<dd>fires on a tag with a [route] that is becoming active, like onload() -  <a href="#features/events/routedemo">demo</a></dd>
+
+	<dt>leave</dt>
+	<dd>fires on a tag with a [route] that is becoming in-active, like onunload() - <a href="#features/events/leavedemo">demo</a></dd>
+
+	<dt>routechange</dt>
+	<dd>fires on window and the veneer-router tag whenever a route is activated, like onhashchange() - see console for demo</dd>
+
+	<dt>onroute</dt>
+	<dd>an attrib-based event (aka inline) that fires when the tag is becoming active  - <a href="#features/events/onroutedemo">demo</a></dd>
+
+	<dt>onleave</dt>
+	<dd>an attrib-based event (aka inline) that fires when the tag is becoming inactive, like onbeforeunload() - <a href="#features/events/onleavedemo">demo</a>. Returning false cancels navigation. - <a href="#onleave">demo</a> </dd>
+
+	<dt>routed</dt>
+	<dd>fires on a nav anchor (nav a, #nav a, .nav a) when it becomes active by having its linked route activate. - demo powers yellow nav link highlight</dd>
+	
+</dl>
+
+</section>
+
+
+
+<section route="features/events/onroutedemo" onroute="alert('onroute handler speaking')" >onroutedemo </section>
+<section route="features/events/routedemo" > routedemo </section>
+<section route="features/events/leavedemo" > 
+ <h3>This is an unload demo, so now go <button onclick=history.back()>back</button>.</h3>
+</section>
+<section route="features/events/onleavedemo" onleave="alert('onleave handler speaking')" > 
+ <h3>This is an unload demo, so now go <button onclick=history.back()>back</button>.</h3>
+</section>
+
+
+
+
+<!-- shows some of the details provided by the integrated history tracking -->
+<section route="features/history"> 
+	<h3>History</h3>
+	<p>Integrated history makes it easy to batch-register activity with existing analytic APIs.</p>
+
+	<veneer-mustache object=router1>
+	<ol>
+	 {{#HISTORY}} <li>  <veneer-datediff time='{{date}}' continuous></veneer-datediff> ago @{{path}} , from [{{oldURL}}] for {{dur|veneer.hms}}</li> {{/HISTORY}} 
+	</ol> 
+	</veneer-mustache>
+</section>
+
+
+<!-- shows how to use templates and routes to select and display remote content -->
+<section route="remote" id=remote> 
+	<h3> Remote Data Example - Choose State to See Largest Counties</h3>
+	
+	<veneer-mustache id=statelist url="http://api.zapjs.com/counties/?SELECT=state&COMPARE=pop%3E10000&TAKE=70&UNIQUE=state&ORDERBY=state&CALL=statelist.render&REDUCE=concat,state,[]&SORT=ASC"> STATES:::
+	<p>	{{#results}}<a href="#remote?state={{.}}">{{.}}</a> {SEP}-{/SEP} {{/results}}</p>	
+	</veneer-mustache>
+	
+	<veneer-mustache id=counties ><template>
+	<h4>10 Most Populous Counties in {{results.0.state}}</h4>
+	<ol> {{#results}}
+	 <li> {{pop|.toLocaleString}} - {{county}} </li>
+	  {{/results}}
+	 </ol>
+	  </template>
+	</veneer-mustache> 
+			
+	<veneer-mustache id=states object=veneer.ROUTE ><template>
+	{{#query}}<script src="http://api.zapjs.com/counties/?SELECT=county,state,pop&COMPARE=pop%3E10000`state::{{state}}&TAKE=10&ORDERBY=pop&CALL=counties.render"></script> {{/query}}
+	</template>		
+	</veneer-mustache> 
+		
+</section>
+
+
+<!-- one-page section utilizing a modal for detail display -->
+<section route="search" id=search> 
+	<h3>Choose a Staff Member for Details in a Modal</h3>
+	<veneer-mustache object="{staff:[ {name:'fred',age:29},{name:'jane',age:22},{name:'bill',age:19},{name:'sally',age:42}, ]}">
+	<ul>
+	 {{#staff}}
+	 <li data-toggle="modal" data-target="#modal1" ><a href="#search?name={{name}}&age={{age}}"   >{{name}}</a></li>
+	  {{/staff}}
+	 </ul>
+	</veneer-mustache>
+	<p>This example just displays the query parameters, see the <a href=#remote>remote content demo</a> for a front end / back end integration.</p>
+</section>
+
+<!-- a simple bootstrap modal dialog bound to dynamic URL data -->
+<bs-modal id=modal1 title='Example Modal' >
+	<div id=modalContent></div>
+</bs-modal>
+
+<div id=contentbox  route='search/' >
+<veneer-mustache id=mt object=veneer.ROUTE  target=#modalContent style=display:none>
+	GET params are available to templates: <br />
+	{{query.name}} is {{query.age}} years old. <hr />
+	  <h5>url: {{url}}</h5>
+	  <h5>path: {{path}}</h5>
+	  <h5>time: {{date|veneer.date|.toLocaleTimeString}}</h5>
+</veneer-mustache>
+</div>
+
+
+
+<!-- one page section demonstrates onleave, which is like onbeforeunload() on physical webpages. 
+ note: this event MUST be defined as an attrib in order to cancel navigation (by evaluating to === false) -->
+<section route="onleave" onleave="if(inp1.value && !confirm('Leaving un-saved work, yo!')) false"> onunload() behaviour via onleave attrib <br /> <br /> 
+  Fill input and navigate away to demo onleave handler <br /> favorite color: <input id=inp1></section>
+
+ 
+<!-- shows how templates are re-rendered  -->
+<section route=/ > <hr /> 
+  navigated here  <veneer-mustache object=window>{{|Date}}</veneer-mustache>
+</section>
+
+
+<!-- this one-page section appears when an invalid route is taken -->
+<section route="404"> Oops, we can't show the page at {{url}} </section>
+
+
+
+<hr />
+	<a href=".">Back to Demos</a> &nbsp;	<a href="/veneer/">Veneer Home</a>
+
+	
+<!-- this empty tag installs bootstrap (optional, but makes demo look better and the widgets attrib loads the groovy modal) -->
+<veneer-bootstrap widgets></veneer-bootstrap>
+
+
+<!-- requirement 1/2 : this empty tag activates the routing functionality -->
+<veneer-route title=textContent id=router1></veneer-route> 
+
+<!-- requirement 2/2 : this tag loads veneer, including the route tag -->
+<script src=http://veneer.danml.com ></script>
+
+
+
+
+<script>
+// IMPORTANT NOTE: ALL OF THIS JAVASCRIPT IS COMPLETELY OPTIONAL! (but shows what it can do if needed)
+
+// demo custom navigation events:
+
+// one section load handling: 
+document.querySelector("[route='features/events/routedemo']")
+  .addEventListener("route", function(e){  
+	alert( "route event via addEventListener talking" );  
+  });
+ 
+// one section unload handling: 
+document.querySelector("[route='features/events/leavedemo']")
+  .addEventListener("leave", function(e){  
+	alert( "leave event via addEventListener talking" );  
+  });
+  
+// all sections leave event:  (log to console)
+ veneer.$("[route]").map(function(elm){
+  elm.addEventListener("leave", function(e){  
+	console.log("Hiding", veneer.now(), this, e);
+  });  
+});
+
+// all sections load event:   (log to console)
+ veneer.$("[route]").map(function(elm){
+  elm.addEventListener("route", function(e){  
+	console.log("Showing",  veneer.now(), this, e);
+  });  
+});
+ 
+ 
+// all nav links routed event:  (animate a bit)
+ veneer.$("nav a, #nav a, .nav a").map(function(elm){
+  elm.addEventListener("routed", function(e){  
+	e.target.style.backgroundColor='yellow';
+	setTimeout(function(){e.target.style.backgroundColor='';}, 400);
+  });  
+});
+  
+  
+// onhashchange() events work, but can execute before veneer updates path meta, so bind the "routechange" event on window instead
+window.addEventListener("routechange", console.info.bind(console, "navigating") ); // log any window-wide nav changes, 
+
+
+ 
+</script>
+</body>
+</html>

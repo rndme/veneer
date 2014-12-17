@@ -1,0 +1,17 @@
+
+
+<a href="#a">A</a>
+<a href="#b">B</a>
+<a href="#c">C</a>
+<a href="#d">D</a>
+<button onclick="history.go(-99)">reset</button>
+
+<script>
+window.onhashchange=function(e){
+ var h=location.hash.slice(1);
+ if(h==="reset"){
+   history.go(-999);
+ }
+};
+
+</script>

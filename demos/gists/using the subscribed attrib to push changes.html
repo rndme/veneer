@@ -1,0 +1,107 @@
+<!doctype html><html><head> 
+	<meta charset="utf-8">
+	<title> veneer demo </title>	
+	<meta name=author content="dandavis">	
+	<meta name=description content="">	
+	<link rel=stylesheet href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<style> 
+		img { padding: 0 1em 0.2em 0; }
+		article { margin-top: 2em; }
+		p{margin:0;}
+		br{display:none;}
+		var { background: pink; padding: 2px 5px; }
+		veneer-mustache { display: block; padding: 0.5em; border: 1px dotted #444; background: #eee; }
+	</style>
+	</head>
+<body class=container id=body>	
+
+<h1>Pushing out change()es using a veneer tag's subscribed attrib</h1>
+
+
+<main id=main>
+
+	<section> 
+		<h2>Example 1 - &lt;veneer-item&gt; to &lt;veneer-mustache&gt; syncing options<h2>
+
+
+		<h4>Example Data Source (a simple form)</h4>		
+		<veneer-item id="myItem" subscribed=.pushed >
+			<label> Name <input name="name" type="text" value="Jane"> </label>
+			<label> Age <input name="age" type="number" min="1" max="99" value="22"> </label>
+				<label>  <input name="male" type="checkbox"> Male </label>
+		</veneer-item>
+		
+		<hr />
+		
+		
+		
+		
+		
+		<h4>Updated via  <var>subscribed</var>  attribute on &lt;veneer-item&gt; </h4>
+		
+		<veneer-mustache object=myItem.value class=pushed >
+			<b>{{name}}</b> is {{age}} years old.
+		</veneer-mustache>
+		
+		<hr />
+			
+			
+		
+		
+		<h4>Updated via 2 second polling from  <var>interval</var> attribute on template</h4>
+		
+		<veneer-mustache object=myItem.value interval=2 >
+			<b>{{name}}</b> is {{age}} years old.
+		</veneer-mustache>
+		
+		<hr />
+		
+		
+		
+		<h4>Updated manually via calling  <var>change()</var> method on template
+			<button onclick=manual1.change()> Apply Update</button> </h4>
+		<veneer-mustache object=myItem.value id=manual1 >
+			<b>{{name}}</b> is {{age}} years old.
+		</veneer-mustache>
+		
+		<hr />
+		
+		
+		
+		<h4>Updated nevermore because of <var>static</var> attribute on template
+			<button onclick=manual3.change()> Apply Update</button> </h4>
+		<veneer-mustache object=myItem.value id=manual3 static >
+			<b>{{name}}</b> is {{age}} years old.
+		</veneer-mustache>
+
+		<hr />
+		
+		
+		
+		<h4>Init/update manually via  <var>render(data)</var> method on template (no  <var>object</var> attribute on template)
+			<button onclick=manual2.render(myItem.value)> Apply Update</button> </h4>
+		<veneer-mustache id=manual2 >
+			<b>{{name}}</b> is {{age}} years old.
+		</veneer-mustache>
+		
+	</section>
+	
+	<section>
+		<h2>Example 2 - &lt;veneer-dateinput&gt; to page title via &lt;veneer-timer&gt; <h2>
+
+		<veneer-dateinput subscribed=veneer-timer ></veneer-dateinput>
+		
+		<veneer-timer onchange="if(event.e)document.title=event.e.value.toLocaleDateString()" ></veneer-timer>
+	
+	
+	
+	</section>
+
+</main>
+
+<hr /><hr /><hr />
+<footer id=footer> <a href="./"> Back to gists </a>  </footer>
+
+<script src="http://veneer.danml.com/"></script>
+</body>
+</html>

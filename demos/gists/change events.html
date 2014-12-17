@@ -1,0 +1,75 @@
+<!doctype html><html><head> 
+	<meta charset="utf-8">
+	<title> veneer demo </title>	
+	<meta name=author content="dandavis">	
+	<meta name=description content="">	
+	<script>
+	  var r=[];
+	  lg=setInterval(function(){ r.push(document.body.getElementsByTagName("*").length); }, 20);
+	  setTimeout("clearInterval(lg); console.log(r)", 3000);
+	 </script>
+	 
+	<link rel=stylesheet href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<link rel=stylesheet href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css1">
+			<link rel=stylesheet href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css2">
+				<link rel=stylesheet href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css3">
+</head>
+<body class=container id=body>	
+
+<h1>Change Event Chaining</h1>
+
+<main id=main>
+
+
+The change() method calls the internal update method, as seen in the tag's module source code. Whenever a bound attrib changes, the tag's change() methods executes. Using the subscribed attribute, you can push those change events to other veneer tags.
+
+the veneer-timer tag sports a change() method, just like all other veneer tags.
+
+<hr />
+
+<veneer-timer id=timer subscribed=veneer-mustache 
+	num=22
+	a="dan"	></veneer-timer> 
+		
+<h3>Change the &lt;veneer-timer&gt;'s attributes using a &lt;veneer-attrib&gt; tag, and notice the change event firing:</h3>
+
+<veneer-attrib target=#timer attrib=num>
+	num=<input type=range min=0 max=30 >
+</veneer-attrib>
+
+
+<veneer-attrib target=#timer attrib=a>
+	a=<input>
+</veneer-attrib>
+
+<hr />
+
+<h3>&lt;veneer-timer&gt; Tag's HTML source code:</h3>
+<veneer-mustache object=timer>
+ {{outerHTML}}
+</veneer-mustache>
+
+
+	
+<hr />
+
+<h3>&lt;veneer-timer&gt; Tag's Change Event Firing Log:<button onclick="logger.innerHTML=''">clear</button></h3>
+<select id=logger size=20></select>
+<script>
+
+timer.onchange= function dumpTag(e){
+//veneer.now().toFixed(0) +"\t" +this.outerHTML
+   logger.insertBefore( new Option( JSON.stringify(e.detail).replace(/"/g,"").replace(/\,/g,", ")), logger.children[0]); 
+};
+
+</script>
+<style>
+body veneer-attrib{ margin: 0.2em; display:block; border: 1px solid #000; padding: 1em;white-space:pre; }
+</style>
+</main>
+
+<footer id=footer> <a href="./"> Back to gists </a>  </footer>
+
+<script src="http://danml.com/veneer/lib/veneer.full.src.js"></script>
+</body>
+</html>

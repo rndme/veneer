@@ -3,16 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <title>Veener Bootstrap Widgets</title>
-	<style>img {width: 100%; } body h3 {margin-top: 2.5em; } .panel-title>a {display: block;}</style> 
-  <!-- pre-loading removes FOUC, but is not needed per-se:
-   <link rel=stylesheet href="http://getbootstrap.com/dist/css/bootstrap.min.css"> -->
+	<style>
+		img {width: 100%; } body h3 {margin-top: 2.5em; } .panel-title>a {display: block;}
+			body {visibility: hidden; }
+			.veneer.bs body {visibility: visible; }
+	</style> 
+  <!-- pre-loading reduces FOUC, but is not needed: -->
+   <link rel=stylesheet href="http://getbootstrap.com/dist/css/bootstrap.min.css">
 </head>
 <body>
 <main class=container>
  
 	<h1>Veneer Bootstrap Widgets</h1>
  
-	<veneer-bootstrap widgets js  ></veneer-bootstrap>
+	<veneer-bootstrap widgets  ></veneer-bootstrap>
  
  	<veneer-pagenav target="h3" link></veneer-pagenav>
  
@@ -25,7 +29,7 @@
 			<img  title="tab 3" src="3.jpg" >
 		</bs-tabs>
 	
-	
+	 
 		<h3>Accordion</h3>
 		<bs-accord id='accordion' title='Accord Demo' >
 			<img  title="panel 1" src="1.jpg" >
@@ -56,7 +60,8 @@
 	</section>	
 </main>
 
-<script src="http://danml.com/veneer/lib/veneer.full.min.js"></script>
 
+
+<script src="http://danml.com/veneer/lib/veneer.full.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head>
+
+	<title>Clock Demo</title>
+	
+	<style>
+		body { font-size: 32px; text-align: center; }
+		veneer-clock { font-size: 480%; margin-bottom: -0.1em; position: relative; right: 0.23em;}
+		veneer-date { font-size: 350%; }
+		[colspan="7"] {visibility: hidden;}
+		td { font-weight: bold;}
+		.cal-today { color: #777;}
+	</style>
+</head>
+<body class=container>
+
+<veneer-mustache interval=60 object=Math class=col-md-12 >
+	<div class=col-md-5>
+		<veneer-clock seconds class=col-md-12></veneer-clock>
+		<veneer-date class=col-md-10></veneer-date>
+	</div>
+	<veneer-cal class=col-md-4></veneer-cal>
+</veneer-mustache>
+
+<veneer-bootstrap></veneer-bootstrap>	
+
+<footer class=col-md-12>
+<div class='col-md-7 col-md-offset-1'><hr />
+	<a href=".">Back to Demos</a> &nbsp;	<a href="/veneer/">Veneer Home</a>
+</div>
+</footer>
+	
+<script src=http://veneer.danml.com ></script>
+
+</body>
+</html>
