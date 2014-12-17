@@ -1,5 +1,5 @@
 <html><head><title>Weather Demo</title>
-<script src="http://danml.com/veneer/lib/veneer.full.src.js"></script>
+<script src="http://danml.com/veneer/lib/veneer.full.min.js"></script>
 </head><body>
  
  <veneer-bootstrap ></veneer-bootstrap>	
@@ -19,11 +19,11 @@
 	 <h2> <progress inderterminate ></progress> Loading Weather </h2>
 	 <template>
 	{{#currentobservation}}
-		<h1> {{Weather}} at {{name}} <br /><small><veneer-datediff time="{{creationDate}}"></veneer-datediff> ago</small></h1>
+		<h1> {{Weather}} <br /><small><veneer-datediff time="{{creationDate}}"></veneer-datediff> ago</small></h1>
 		<h2> {{Temp}}F, {{Relh}}% humidity, winds at {{Winds}}mph </h2>
 		<p> {{data.text.0}} </p>
 		
-		<img src="{{data.iconLink.0}}" height=100 width=100/>
+		<img src="{{data.iconLink.0}}" height=150 width=150/>
 		
 		<veneer-map width=150 height=150 lat={{location.latitude}} lon={{location.longitude}} zoom=10 ></veneer-map>
 		

@@ -4,33 +4,41 @@
 	<title>Todo List Demo</title>
 	
 	<style>
-		body { font-family: monospace; }
+		body { font-family: monospace; font-size: 133%; visibility: hidden; }
+		html.veneer body { visibility: visible; }
 		li input { height: 2em; width: 2em;}
-		li button { position: absolute; opacity: 0.75; margin-top: 0.4em; display: none;}
+		li button { position: absolute; opacity: 0.75; padding: 0.65em; display: none;}
 		#counter,
 		li [contenteditable]:focus + button,
 		button:focus ,
 		button:hover { display: inline-block; opacity: 1;}
+		#counter[title*=' 0/0']{ display: none; }
 		li:hover button { display: inline-block;float: left; } 
+		li:hover { background: #ddd; }
 		ul,li{ margin:0.2em 0; padding:0; list-style: none; }
-		li { display: block; font-size: 150%; }
-		[contenteditable]{ display: inline-block; margin: 0 1em; padding: 4px; vertical-align:top; }
-		#task, #task+input { font-size: 125%; padding: 0.2em; }
+		li { display: block; font-size: 175%; margin-top: 0.2em; padding: 0.4em 0 0.3em 0; vertical-align: middle; }
+		label { cursor: pointer;} 
+		[contenteditable]{ display: inline-block; margin:0; margin-left: -0.6em; margin-right: 0.4em; padding: 4px; vertical-align:top; margin-top: -0.25em}
+		#task, #task+input { font-size: 125%; padding: 0.4em; }
 		body veneer-persist {display: block;}
 		body veneer-mustache { display: none; }
+		
 	</style>
 </head>
 <body>
 	
-	<h1>Todo List</h1>	
+	<h1>Todo List  &nbsp; &nbsp; 	<veneer-mustache id=counter object="{done:veneer.$('#list :checked').length, total:list.children.length}">
+		(	{{done}} / {{total}}	)
+		<veneer-timer onchange="parentNode.title='Completed: {{done}}/{{total}}'; " ></veneer-timer>
+	</veneer-mustache></h1>	
 	
 	<form onsubmit="lister.append(this); reset(); return false; ">
 		<input id=task autofocus required placeholder="What needs to be done?"  > 		
 		<input type=submit value=add >
 	</form>
 	
-	<label> 
-		<veneer-attriball publish target="#list input">
+	<label> &nbsp;
+		<veneer-attriball prop="checked" target="#list input">
 			<input type=checkbox> 
 		</veneer-attriball> 
 		Mark all as complete 
@@ -41,14 +49,10 @@
 		<ul id=list></ul>
 	</veneer-persist>
 
-	Done: 
-	<veneer-mustache id=counter object="{done:veneer.$('#list :checked').length, total:list.children.length}">
-			{{done}} / {{total}}	
-	</veneer-mustache>
 
 	<veneer-mustache id=lister target=#list onchange=counter.change()>
 		<li> 
-			<veneer-input><input type=checkbox></veneer-input>
+			<label><veneer-input><input type=checkbox></veneer-input> &nbsp;</label>
 			<span contenteditable> {{task.value}} </span>
 			<button onclick=parentNode.remove() title='Delete this todo item' >X</button>		
 		</li>
@@ -57,6 +61,7 @@
 	<!--<script src=http://veneer.danml.com ></script>-->
 	<script src=http://danml.com/veneer/lib/veneer.full.src.js ></script>
 	
+	<br /><br /><br />
 	<hr />
 	<a href=".">Back to Demos</a> &nbsp;	<a href="/veneer/">Veneer Home</a>
 	
